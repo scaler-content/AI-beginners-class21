@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Class 21 · Deploying AI Apps — Platforms, Hosting &amp; Going Live — Chapter One Edition</title>
+<!-- Revised 2026-09-07: Build 2 no longer self-hosts Dify via Docker (never taught in this curriculum) — replaced with a small vibe-coded Node backend ("Restock Radar") deployed in parallel to Render AND Railway, for equal, honest three-platform coverage. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -321,7 +322,7 @@ pre.code .kw{color:var(--orange2)}
 <a class="nl" href="#platforms">Pick a Platform</a>
 <a class="nl" href="#build1">Build 1 · Vercel</a>
 <a class="nl" href="#secrets">Env Vars &amp; Secrets</a>
-<a class="nl" href="#build2">Build 2 · Render</a>
+<a class="nl" href="#build2">Build 2 · Render &amp; Railway</a>
 <a class="nl" href="#limits">Free-Tier Limits</a>
 <a class="nl" href="#live">Going Live For Real</a>
 <a class="nl" href="#takehome">Take-Home</a>
@@ -333,11 +334,11 @@ pre.code .kw{color:var(--orange2)}
   <div class="eyebrow">
     <span class="chip hot">CLASS 21 / SESSION SCRIPT</span>
     <span class="chip">DEPLOYING AI APPS · PLATFORMS &amp; HOSTING</span>
-    <span class="chip cool">VERCEL · RENDER · GITHUB · DIFY</span>
+    <span class="chip cool">VERCEL · RENDER · RAILWAY · GITHUB</span>
     <span class="chip">FREE TIER FIRST</span>
   </div>
   <h1>It Works On My Laptop Isn't Shipped. <span class="amp">A Live URL Is Shipped.</span></h1>
-  <p class="sub"><b>Nikhil built something genuinely good last month, and the only way to see it is to be standing next to his laptop with the lid open.</b> Today closes that gap — not with a new tool, not with a new feature, but by taking two things you already built and putting them on the open internet, for free, with the API keys kept out of sight the whole time.</p>
+  <p class="sub"><b>Nikhil built something genuinely good last month, and the only way to see it is to be standing next to his laptop with the lid open.</b> Today closes that gap — not with a new tool, not with a new feature, but by taking the shelf-talker page you already built and putting it on the open internet, and then vibe-coding one brand-new small backend app live and deploying that exact same app to two different platforms in parallel — all for free, with the API key kept out of sight the whole time.</p>
 
   <div class="slackDrop" style="margin-top:32px">
     <div class="av">👓</div>
@@ -347,7 +348,7 @@ pre.code .kw{color:var(--orange2)}
   <p style="font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange2);margin-top:14px">🚀🔗🔒 Today's rule: a live URL beats a laptop demo every time — and the API key never rides along in the same commit.</p>
 
   <div class="heroStats">
-    <div class="hstat"><div class="n" data-count="2">0</div><div class="l">Existing Apps Deployed Live</div></div>
+    <div class="hstat"><div class="n" data-count="2">0</div><div class="l">Apps Deployed Live</div></div>
     <div class="hstat"><div class="n" data-count="3">0</div><div class="l">Hosting Platforms Compared</div></div>
     <div class="hstat"><div class="n" data-count="5">0</div><div class="l">Live Simulators</div></div>
     <div class="hstat"><div class="n" data-count="0">0</div><div class="l">Rupees Spent</div></div>
@@ -359,7 +360,7 @@ pre.code .kw{color:var(--orange2)}
     <div class="agRow"><span class="t">00:18–00:38</span><span class="name">Build 1 — shelf-talker.html → GitHub → Vercel, live URL</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
     <div class="agRow"><span class="t">00:38–00:46</span><span class="name">☕ Stretch break</span><span class="tag">BREAK</span></div>
     <div class="agRow"><span class="t">00:46–01:02</span><span class="name">Environment Variables &amp; API Key Security</span><span class="tag simtag">SIM + QUIZ</span></div>
-    <div class="agRow"><span class="t">01:02–01:26</span><span class="name">Build 2 — the Dify chatbot → a real deploy on Render</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
+    <div class="agRow"><span class="t">01:02–01:26</span><span class="name">Build 2 — vibe-code Restock Radar → deployed in parallel on Render AND Railway</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
     <div class="agRow"><span class="t">01:26–01:40</span><span class="name">Free-Tier Limits — where each platform's ceiling actually is</span><span class="tag simtag">SIM + QUIZ</span></div>
     <div class="agRow"><span class="t">01:40–01:50</span><span class="name">Going Live For Real — webhooks, custom domains, portfolio value</span><span class="tag">DISCUSSION</span></div>
     <div class="agRow"><span class="t">01:50–02:00</span><span class="name">Take-Home &amp; Wrap-Up</span><span class="tag">3 CHALLENGES</span></div>
@@ -387,14 +388,15 @@ pre.code .kw{color:var(--orange2)}
     </div>
   </div>
 
-  <div class="note beg"><b>Why this class exists:</b> nothing you build today is new. The shelf-talker page from Class 17 and the Dify chatbot from earlier this course are both finished, working software. The only thing missing is a public address and a safe way to hold the one secret they each depend on. That's deployment — not a new skill on top of building, the last 20% that turns "I built a thing" into "here's the link."</p></div>
+  <div class="note beg"><b>Why this class exists:</b> the shelf-talker page from Class 17 is already finished, working software — Build 1 gives it nothing but an address. Build 2 vibe-codes something small and new on the spot, precisely to show the deploy steps apply to any backend app, not just one specific project. Either way, the coding was never today's hard part — deployment is the last 20% that turns "I built a thing" into "here's the link."</p></div>
 
   <div class="say ask">
     <span class="who">💬 Chat Drop — 45 sec</span>
     <p>"Type one thing you've built in this course — in any class — that still only runs on your own laptop. Would anyone else in your life actually be able to open it right now, without you sitting next to them? Keep that honest answer on screen."</p>
   </div>
 
-  <div class="note pro"><b>Instructor — before you teach this live:</b> §2's Vercel import and §4's Render environment-variable steps were pulled from vercel.com/docs and render.com/docs directly (Sept 2026) — re-diff the exact button labels the night before, this category of UI reshuffles menus more than most. Also re-confirm Railway's current pricing page before class: as of this writing Railway has no standing free tier, only a one-time trial credit, and §1's comparison table reflects that honestly rather than the curriculum's original "free tier" framing.</div>
+  <div class="note pro"><b>Instructor — before you teach this live:</b> §2's Vercel import and §4's Render and Railway environment-variable steps were pulled from vercel.com/docs, render.com/docs and docs.railway.com directly (Sept 2026) — re-diff the exact button labels the night before, this category of UI reshuffles menus more than most. Also re-confirm Railway's current pricing page before class: as of this writing Railway has no standing free tier, only a one-time trial credit, and §1's comparison table reflects that honestly rather than the curriculum's original "free tier" framing.</div>
+  <div class="note adv"><b>A deliberate change from the original curriculum:</b> Build 2 used to mean self-hosting Dify via Docker Compose on Render. Nothing in this course teaches Docker, containers, or multi-service orchestration — asking students to deploy a stack they've never learned the shape of turns a lesson about hosting into a lesson about Docker instead. Build 2 is now a small backend app the class vibe-codes from scratch in minutes, with no container involved — and because it's genuinely light, today gives Vercel, Render, and Railway equal, honest airtime instead of leaning on one.</div>
 </div></section>
 
 <!-- ============ SECTION 1: PICK A PLATFORM ============ -->
@@ -415,11 +417,11 @@ pre.code .kw{color:var(--orange2)}
     <tr><td>Railway</td><td>A one-time <b>$5 trial credit</b>, no card required to start. That's it — there is no longer a standing free tier.</td><td>A single small always-on service burns the entire $5 credit in about three weeks. After that it's a real bill, starting around $5/month minimum.</td></tr>
   </table>
 
-  <div class="note adv"><b>Curriculum honesty flag:</b> the original course material names Railway alongside Render as a "free tier" deploy target for Build 2. Live research for this class (Sept 2026) found Railway removed its permanent free tier back in 2024 — what remains is a one-time trial credit that behaves nothing like an ongoing free plan. Following this series' standing rule (same call made for Telegram in Class 11 and Windsurf in Class 17): Railway stays in the comparison table and gets a one-line mention as an option, but today's actual hands-on Build 2 uses <b>Render</b>, which still has a genuine, renewing-every-month free tier.</div>
+  <div class="note adv"><b>Curriculum honesty flag:</b> Railway removed its permanent free tier back in 2024 — what remains is a one-time <b>$5 trial credit</b> that behaves nothing like an ongoing free plan. That's real, and the comparison table above says so plainly. It's still worth putting hands on today: a small, lightweight backend app comfortably fits inside that $5 credit for a single class session, which is enough to run a fair, live, side-by-side comparison against Render. What it is <em>not</em> is a plan for keeping something running for free indefinitely — say that part out loud, every time Railway comes up.</div>
 
   <div class="say">
     <span class="who">🎙 Instructor Says</span>
-    <p>"Map this onto the two things Nikhil built. The shelf-talker page is one static HTML file — no server, no database, nothing that needs to 'run' continuously. That's a <b>display window</b> — Vercel, easily, forever free. The Dify chatbot is a real running application with its own server, database and background workers behind it — that needs an actual kitchen. That's Render, not Vercel — Vercel's free tier can't run something like that at all."</p>
+    <p>"Map this onto today's two builds. The shelf-talker page is one static HTML file — no server, no database, nothing that needs to 'run' continuously. That's a <b>display window</b> — Vercel, easily, forever free. Build 2's app is small, but it does need a real running server behind it — that's a <b>kitchen</b>, not a display window, so Vercel's free tier is off the table for it entirely. Today we don't just pick one kitchen — we rent the same small app a spot in <b>both</b> Render's and Railway's kitchens, at the same time, and compare what each one actually gives you."</p>
   </div>
 
   <!-- SIM 1 -->
@@ -535,13 +537,13 @@ pre.code .kw{color:var(--orange2)}
     <div class="realCard">
       <div class="rtag">The Near-Miss, Chapter One Shaped</div>
       <h4>What it would look like here</h4>
-      <p>Imagine Nikhil pastes the Dify chatbot's Gemini API key straight into a <code class="k">config.js</code> file "just to get it working today," pushes the repo to GitHub as public (so Ravi can glance at the code later), and moves on. Nothing bad has to happen immediately — but the key is now sitting in the commit history of a public repo, discoverable by anyone, including automated scanners that exist purely to find exactly this.</p>
+      <p>Imagine Nikhil pastes Restock Radar's Gemini API key straight into a <code class="k">config.js</code> file "just to get it working today," pushes the repo to GitHub as public (so Ravi can glance at the code later), and moves on. Nothing bad has to happen immediately — but the key is now sitting in the commit history of a public repo, discoverable by anyone, including automated scanners that exist purely to find exactly this.</p>
     </div>
   </div>
 
   <div class="say">
     <span class="who">🎙 Instructor Says</span>
-    <p>"The fix is not 'be more careful.' The fix is a rule that removes the temptation entirely: <b>a real secret never appears as literal text inside a file that gets committed to git — ever, not even once, not even temporarily.</b> It goes into the hosting platform's environment variable settings, or into a local <code class="k">.env</code> file that's explicitly excluded from git via <code class="k">.gitignore</code>. Both Vercel and Render have a dedicated Environment Variables screen for exactly this — that's not a bonus feature, it's the whole reason it exists."</p>
+    <p>"The fix is not 'be more careful.' The fix is a rule that removes the temptation entirely: <b>a real secret never appears as literal text inside a file that gets committed to git — ever, not even once, not even temporarily.</b> It goes into the hosting platform's environment variable settings, or into a local <code class="k">.env</code> file that's explicitly excluded from git via <code class="k">.gitignore</code>. Vercel, Render, and Railway all have a dedicated Environment Variables screen for exactly this — that's not a bonus feature, it's the whole reason it exists."</p>
   </div>
 
   <!-- SIM 3 -->
@@ -571,44 +573,66 @@ pre.code .kw{color:var(--orange2)}
 
 <div class="divider"></div>
 
-<!-- ============ SECTION 4: BUILD 2 — RENDER ============ -->
+<!-- ============ SECTION 4: BUILD 2 — RESTOCK RADAR ON RENDER & RAILWAY ============ -->
 <section class="blk" id="build2"><div class="wrap">
-  <div class="secHead"><span class="secNum">§ 4 · Build 2</span><h2>The Dify Chatbot → a Real Deploy on Render</h2><span class="secTime">⏱ 24 min</span></div>
-  <p class="secLede">The Dify chatbot you built earlier this course already reasons well. Today isn't about rebuilding it — it's about giving it a public address of its own, with the LLM key held safely the whole way through.</p>
-
-  <div class="note pro"><b>Instructor — a real pivot, and here's exactly why:</b> live research for this class turned up two things that change Build 2's shape from the original curriculum framing. <b>First:</b> Dify Cloud's own free Sandbox plan already hands you a shareable public link the moment you publish a chatbot there — no deploy needed at all, similar to what Lovable already did in §2's framing. <b>Second:</b> a full self-hosted Dify stack (its web app, API server, background worker, database and vector store, run together via Docker Compose) needs roughly <b>4GB of RAM and 2 CPU cores</b> to run properly by Dify's own setup guidance — and Render's free web service tier gives you <b>512MB RAM and 0.1 CPU</b>. That's not close. Today's Build 2 is deliberately built around hitting that wall live, in front of the class, because "here's exactly what a free-tier ceiling looks like when you slam into it" is a stronger lesson than a demo that quietly never tests the limit.</div>
+  <div class="secHead"><span class="secNum">§ 4 · Build 2</span><h2>Vibe-Code Restock Radar → Deployed in Parallel on Render AND Railway</h2><span class="secTime">⏱ 24 min</span></div>
+  <p class="secLede">A brand-new small backend app, built live in minutes — then the exact same app deployed to two different platforms side by side, so the class sees the real difference instead of taking anyone's word for it.</p>
 
   <div class="say">
-    <span class="who">🎙 Instructor Says</span>
-    <p>"So why deploy Dify yourself at all, if Dify Cloud already gives you a free link? Two honest reasons, and say both: Dify Cloud's free Sandbox caps you at a couple hundred model calls before it wants you on a paid plan, and it's Dify's server, Dify's uptime, Dify's terms — not Chapter One's. Self-hosting is what you reach for the day either of those stops being fine. Today we walk the mechanics for real, on Render, and we're honest on-screen about exactly where the free tier stops being enough."</p>
+    <span class="who">🎙 Instructor Says — the ask, from Tara</span>
+    <p>"Here's the request: right now, when Tara or a weekend staffer notices a title running low, the only way to flag it is texting Nikhil directly — and it gets lost in his messages within a day. Tara wants a tiny page anyone on staff can open, type a book title and a note into, and hit submit. Behind it, one small backend does two things: calls Gemini once to tag the request's urgency — Low, Medium, or High — and adds it to a running list everyone can see. That's it. That's Restock Radar."</p>
+  </div>
+
+  <div class="defBox">
+    <span class="term">Why this needs a real backend, not another Vercel static page</span>
+    <p>The shelf-talker page in Build 1 never talks to anything else — it's pure HTML, so a static host is perfect for it. Restock Radar is different: it has to hold a growing list of requests <b>in memory between visits</b>, and it has to call the Gemini API with a secret key <b>from server-side code that never reaches the browser</b>. Both of those need an actual server process that stays running — which is exactly what Vercel's Hobby tier is not built for, and exactly what Render and Railway both are.</p>
+  </div>
+
+  <div class="say do">
+    <span class="who">🛠 Instructor Does — live, on screen</span>
+    <p>Open a vibe-coding tool the class already knows (Lovable, Bolt, or Claude Code directly in the terminal) and give it one focused prompt: <em>"Build a small Node.js + Express app called Restock Radar. One HTML page with a form (book title, note). POST /request calls the Gemini API to tag the note's urgency as Low/Medium/High, then appends {title, note, urgency, time} to an in-memory array. GET / renders the current list, newest first. Read the Gemini key from process.env.GEMINI_API_KEY — never hardcode it."</em> Two files come back: <code class="k">server.js</code> and <code class="k">index.html</code>. Run it once locally — <code class="k">npm install && node server.js</code> — submit one test request, confirm the urgency tag comes back and the list renders. Nothing further gets hand-written; today is about shipping it, not polishing it.</p>
   </div>
 
   <ol class="verifySteps">
-    <li><b>Start from the existing export.</b> Dify's self-hosted repository ships a ready-made <code class="k">docker-compose.yaml</code> that starts the whole stack — web, API, worker, Postgres, Redis, and a vector store — with one command. That file is the "code" being deployed; nothing about the chatbot's own configuration changes.</li>
-    <li><b>Push it to GitHub</b> the same way as Build 1 — <code class="k">git init</code>, <code class="k">git add .</code>, <code class="k">git commit</code>, create an empty repo on GitHub, then <code class="k">git remote add origin …</code> and <code class="k">git push</code>.</li>
-    <li><b>On Render, choose "Blueprint" instead of "Web Service.</b>" Render's Blueprints read a <code class="k">render.yaml</code> and provision multiple linked services (web, worker, database) from one repo in a single pass — this is the shape a multi-service app like Dify actually needs, not a single Web Service.</li>
-    <li><b>Set the environment variables before the first deploy.</b> In the service's <b>Environment</b> tab, click <b>+ Add Environment Variable</b> and add the LLM provider key — never typed into any file in the repo:
-      <div class="codeWrap"><button class="copyBtn" type="button">Copy</button><pre class="code"><span class="cm"># Render dashboard → Environment tab → + Add Environment Variable</span>
-<span class="kw">Key:</span>   OPENAI_API_KEY   <span class="cm">(or GOOGLE_API_KEY, whichever the chatbot actually calls)</span>
-<span class="kw">Value:</span> <span class="st">"the real key — pasted here, never into a file"</span></pre></div>
-      Choose <b>Save, rebuild, and deploy</b> so the new variable is actually picked up.
+    <li><b>Push the app to GitHub</b> — the identical three commands from Build 1, run inside the new folder:
+      <div class="codeWrap"><button class="copyBtn" type="button">Copy</button><pre class="code"><span class="cm"># Terminal — run inside the restock-radar folder</span>
+<span class="fn">git</span> init
+<span class="fn">git</span> add .
+<span class="fn">git</span> commit -m <span class="st">"restock-radar: first commit"</span>
+<span class="cm"># then, after creating an empty repo on github.com/new named restock-radar:</span>
+<span class="fn">git</span> remote add origin https://github.com/nikhil-chapterone/restock-radar.git
+<span class="fn">git</span> branch -M main
+<span class="fn">git</span> push -u origin main</pre></div>
     </li>
-    <li><b>Try it on the free instance type first — and watch it struggle or fail to boot.</b> This is the point, not a mistake to route around: the build log will show the containers competing for 512MB of RAM, and at least one service (usually the vector store or worker) will be OOM-killed or crash-loop.</li>
-    <li><b>Bump the web and worker services to Render's Standard instance type</b> (the smallest tier with enough RAM/CPU headroom for Dify's stack) under <b>Settings → Instance Type</b>. This step costs real money — say the number out loud in class, and confirm it against Render's current pricing page before teaching live, since instance pricing moves. On Standard, the same Blueprint boots cleanly and the chatbot answers from its own public URL within a couple of minutes.</li>
-    <li><b>Open the live URL</b> Render assigns to the web service, send the chatbot a real message, and confirm the response comes back — this is the exact same chatbot logic from earlier in the course, now reachable by anyone with the link, not just Nikhil's laptop.</li>
+    <li><b>Deploy the SAME repo to Render.</b> On the Render dashboard: <b>New +</b> → <b>Web Service</b> → connect the <code class="k">restock-radar</code> repo. Build command <code class="k">npm install</code>, start command <code class="k">node server.js</code>. Under <b>Environment</b>, add <code class="k">GEMINI_API_KEY</code> with the real key. Click <b>Deploy Web Service</b>.</li>
+    <li><b>Deploy the SAME repo to Railway, at the same time.</b> On the Railway dashboard: <b>New Project</b> → <b>Deploy from GitHub repo</b> → pick <code class="k">restock-radar</code>. Railway auto-detects a Node app and infers the start command from <code class="k">package.json</code>. Under the service's <b>Variables</b> tab, add <code class="k">GEMINI_API_KEY</code> the same way. Deploy starts automatically the moment the variable is saved.</li>
+    <li><b>Open both live URLs side by side</b> — Render hands out something like <code class="k">restock-radar.onrender.com</code>, Railway something like <code class="k">restock-radar.up.railway.app</code>. Submit the identical restock request on each and confirm both return the same urgency tag and both show it in their list.</li>
   </ol>
 
-  <div class="note adv"><b>The honest bottom line for the room:</b> a lightweight static file (Build 1) is genuinely free forever. A real multi-service AI application (Build 2) is <em>reliably deployable</em> for free — Render's Blueprint mechanics, environment variables, and live URL all work at zero cost — but running something as resource-hungry as self-hosted Dify continuously needs a small paid instance. That's not a workaround or a trick; that's what "free tier" actually means once you're honest about what a real backend costs to keep warm.</div>
+  <div class="twoCol">
+    <div class="colCard">
+      <div class="ct" style="color:var(--teal)">RENDER — WHAT THE DASHBOARD ACTUALLY ASKS FOR</div>
+      <p>A named build command and start command up front, a dedicated Environment tab for variables, and a visible <b>free instance-hours</b> counter. Deploy takes roughly 60–90 seconds from a clean push. First cold visit after 15 minutes idle: a real, visible wait.</p>
+    </div>
+    <div class="colCard">
+      <div class="ct" style="color:var(--gold)">RAILWAY — WHAT THE DASHBOARD ACTUALLY ASKS FOR</div>
+      <p>No build/start command needed for a standard Node app — it reads <code class="k">package.json</code> itself. Variables live under a <b>Variables</b> tab, not "Environment." Deploy is comparably fast. No 15-minute spin-down on a running service — the ceiling here is the <b>trial credit running out</b>, not idle time.</p>
+    </div>
+  </div>
+
+  <div class="note pro"><b>Instructor — verify before you teach this live:</b> re-check Render's exact "New Web Service" flow against <a href="https://render.com/docs/deploy-node-express-app" target="_blank" rel="noopener">render.com/docs</a> and Railway's "Deploy from GitHub repo" flow against <a href="https://docs.railway.com" target="_blank" rel="noopener">docs.railway.com</a> the night before — both dashboards reshuffle button labels between releases.</div>
+
+  <div class="note adv"><b>The honest bottom line for the room:</b> this is the whole reason Build 2 stayed small. A lightweight Node app with one in-memory list and one external API call fits comfortably inside Render's 750 free instance-hours and Railway's one-time $5 trial credit — no wall to hit today, no paid tier needed, no Docker anywhere in the picture. That's a deliberate trade: today's app can't survive a server restart (the list lives in memory, not a database) — a real product would need one, and that's a fair follow-up question to leave open, not a flaw to hide.</div>
 
   <!-- SIM 4 -->
   <div class="sim" id="sim4">
     <h3>SIM 4 · The Environment-Variable Vault</h3>
-    <p class="simSub">Five items are about to be pushed somewhere. For each one, decide: does it belong in Render's private Environment Variables panel, or is it fine sitting in the public GitHub repo? Get it wrong on a real secret and watch exactly what "leaked" looks like.</p>
+    <p class="simSub">Five items are about to be pushed somewhere. For each one, decide: does it belong in the platform's private Environment/Variables panel, or is it fine sitting in the public GitHub repo? Get it wrong on a real secret and watch exactly what "leaked" looks like.</p>
 
     <div class="secretPool" id="s4pool"></div>
 
     <div class="vaultGrid">
-      <div class="vaultZone env"><div class="vzTitle">🔒 Render Environment Variables (private)</div><div id="s4env"></div></div>
+      <div class="vaultZone env"><div class="vzTitle">🔒 Render / Railway Environment Variables (private)</div><div id="s4env"></div></div>
       <div class="vaultZone pub"><div class="vzTitle">📂 Pushed to Public GitHub Repo</div><div id="s4pub"></div></div>
     </div>
 
@@ -616,11 +640,11 @@ pre.code .kw{color:var(--orange2)}
   </div>
 
   <div class="quiz" id="quiz4">
-    <div class="q">Q4. Render's free web service instance type can't fit the full Dify stack, and Standard costs real money every month. Reema asks why Chapter One should pay anything at all when Dify Cloud is free. What's the fair answer?</div>
-    <div class="opt" data-c="0"><span class="ab">A</span><span>Because Dify Cloud's free Sandbox caps out on model calls and runs on someone else's terms — self-hosting is the option you reach for specifically when you outgrow that, and it costs money precisely because it's giving you dedicated resources Sandbox never promised.</span></div>
-    <div class="opt" data-c="1"><span class="ab">B</span><span>Because Render secretly disables the free tier for any AI-related workload, regardless of resource usage.</span></div>
-    <div class="opt" data-c="2"><span class="ab">C</span><span>There's no good reason — Chapter One should always prefer whichever option is free, with no other consideration.</span></div>
-    <div class="quizWhy">Correct answer: <b>A</b>. Free tiers aren't arbitrary — they're sized for light workloads. Self-hosted Dify is genuinely heavier than that, and paying a small amount for dedicated resources is a real, honest trade-off, not a platform being unfair.</div>
+    <div class="q">Q4. Reema asks why the class deployed Restock Radar to both Render and Railway today, instead of just picking one and moving on. What's the fair answer?</div>
+    <div class="opt" data-c="0"><span class="ab">A</span><span>Because deploying the same small app to both, side by side, is what actually shows the real differences — build steps, variable panels, spin-down vs. trial-credit — instead of taking a comparison table's word for it. In practice, Chapter One would keep only one going forward.</span></div>
+    <div class="opt" data-c="1"><span class="ab">B</span><span>Because a single app must always be deployed to every available platform simultaneously as a permanent redundancy strategy.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>Because Render and Railway secretly require each other to function and neither works alone.</span></div>
+    <div class="quizWhy">Correct answer: <b>A</b>. Today's parallel deploy is a teaching exercise, not a production pattern — the point is to feel the differences firsthand once, not to run every app on two platforms forever.</div>
   </div>
 </div></section>
 
@@ -674,7 +698,7 @@ pre.code .kw{color:var(--orange2)}
 
   <div class="say">
     <span class="who">🎙 Instructor Says — Closing Class 18's Thread</span>
-    <p>"Remember exactly where Class 18 left off, deliberately unanswered: <b>'What happens the week Nikhil's on holiday, and Saturday still needs a recap sent — with nobody there to ask?'</b> Here's the answer, and it only exists because of today. A Claude Project or a skill.md only does anything when a human opens a chat and asks. But the Dify chatbot now has a real, permanent public URL — which means an <b>n8n schedule trigger or a Zapier scheduled Zap can call it directly, every Saturday morning, with nobody there to click anything.</b> No laptop needs to be open. No human needs to remember. The recap gets generated and sent on its own, because the thing generating it finally has an address a webhook can find."</p>
+    <p>"Remember exactly where Class 18 left off, deliberately unanswered: <b>'What happens the week Nikhil's on holiday, and Saturday still needs a recap sent — with nobody there to ask?'</b> Here's the answer, and it only exists because of today. A Claude Project or a skill.md only does anything when a human opens a chat and asks. But Restock Radar now has a real, permanent public URL — which means an <b>n8n schedule trigger or a Zapier scheduled Zap can call its list endpoint directly, every Saturday morning, and post a 'here's what's low this week' summary to the shop's WhatsApp, with nobody there to click anything.</b> No laptop needs to be open. No human needs to remember. The summary gets generated and sent on its own, because the thing generating it finally has an address a webhook can find."</p>
   </div>
 
   <div class="defBox">
@@ -730,9 +754,9 @@ pre.code .kw{color:var(--orange2)}
   <div class="card">
     <h3>A Day in Nikhil's Life — before and after today</h3>
     <div class="prepRow"><b>9:00 AM</b><span>Before: opens his laptop specifically to show someone the shelf-talker page. After: sends a link, keeps working the counter.</span></div>
-    <div class="prepRow"><b>11:30 AM</b><span>Before: pastes the Gemini key straight into a config file "just for now." After: it goes into Render's Environment tab, never touches a committed file.</span></div>
-    <div class="prepRow"><b>2:00 PM</b><span>Before: the Dify chatbot exists only as a screenshot in a WhatsApp message to Sarita. After: Sarita opens the actual live URL herself, on her own phone.</span></div>
-    <div class="prepRow"><b>Saturday, no Nikhil</b><span>Before: no recap goes out, because nobody's there to trigger it. After: an n8n schedule hits the deployed chatbot's public URL on its own — the recap goes out with zero humans involved.</span></div>
+    <div class="prepRow"><b>11:30 AM</b><span>Before: pastes the Gemini key straight into a config file "just for now." After: it goes into Render's and Railway's Environment/Variables tabs, never touches a committed file.</span></div>
+    <div class="prepRow"><b>2:00 PM</b><span>Before: Restock Radar exists only as a screenshot in a WhatsApp message to Sarita. After: Sarita opens the actual live URL herself, on her own phone, and Tara flags a low title from the counter without texting anyone.</span></div>
+    <div class="prepRow"><b>Saturday, no Nikhil</b><span>Before: no low-stock summary goes out, because nobody's there to trigger it. After: an n8n schedule hits Restock Radar's public URL on its own — the summary goes out with zero humans involved.</span></div>
   </div>
 
   <table class="tbl">
@@ -740,7 +764,7 @@ pre.code .kw{color:var(--orange2)}
     <tr><td>Choosing between Vercel, Render, and Railway with an actual reason, not a guess</td><td>§1</td></tr>
     <tr><td>Taking a finished static app from a laptop to a live public URL, for free, forever</td><td>§2</td></tr>
     <tr><td>Never hardcoding a secret — using environment variables as the default, not the exception</td><td>§3</td></tr>
-    <tr><td>Deploying a real multi-service backend and reading a free-tier ceiling honestly</td><td>§4</td></tr>
+    <tr><td>Deploying the same small backend app to two platforms in parallel and comparing them honestly, not just picking one and hoping</td><td>§4</td></tr>
     <tr><td>Knowing exactly what happens — and why — when a free tier gets hit</td><td>§5</td></tr>
     <tr><td>Connecting a deployed app to a scheduled webhook so nothing needs a human to fire it</td><td>§6</td></tr>
   </table>
@@ -754,17 +778,17 @@ pre.code .kw{color:var(--orange2)}
     <p>5. <b>A public URL is what lets automation find your app without you.</b> That's the whole mechanism behind a webhook triggering something on a schedule, with nobody there to click anything.</p>
   </div>
 
-  <p class="bigQuote">Nikhil's shelf-talker page and the Dify chatbot are both live now — reachable by anyone, keys held safely off to the side, and finally able to answer a schedule trigger with no one watching. <em>But today's whole config still assumes Nikhil is the only person who ever needs to change any of it.</em></p>
+  <p class="bigQuote">Nikhil's shelf-talker page and Restock Radar are both live now — reachable by anyone, keys held safely off to the side, and finally able to answer a schedule trigger with no one watching. <em>But today's whole config still assumes Nikhil is the only person who ever needs to change any of it.</em></p>
 
   <div class="say">
     <span class="who">🎙 Instructor Says — Closing</span>
-    <p>"Leave with this one, unanswered on purpose: today, every environment variable, every Vercel project, every Render Blueprint lives under Nikhil's own account. That's fine while it's one person building everything. But <b>what happens the day Tara or one of the weekend staff needs to update the chatbot's key, or Sarita wants to see the Render dashboard herself, and none of them has Nikhil's login?</b> Access, permissions, and who actually owns a deployed thing once more than one person depends on it — that's not today's problem. That's next time's."</p>
+    <p>"Leave with this one, unanswered on purpose: today, every environment variable, every Vercel project, every Render and Railway service lives under Nikhil's own account. That's fine while it's one person building everything. But <b>what happens the day Tara or one of the weekend staff needs to update Restock Radar's key, or Sarita wants to see the Render dashboard herself, and none of them has Nikhil's login?</b> Access, permissions, and who actually owns a deployed thing once more than one person depends on it — that's not today's problem. That's next time's."</p>
   </div>
 </div></section>
 
 <footer class="footer"><div class="wrap">
   <p><b>Class 21 · Deploying AI Apps — Platforms, Hosting &amp; Going Live</b> — 5 simulators · 5 checkpoint quizzes</p>
-  <p style="margin-top:6px">— Scaler AIML · verified September 2026 · re-verify before teaching · Railway's standing free tier and Dify Cloud's free public URL were both confirmed via live research and reflected honestly above</p>
+  <p style="margin-top:6px">— Scaler AIML · verified September 2026 · re-verify before teaching · Railway's lack of a standing free tier was confirmed via live research and reflected honestly above</p>
 </div></footer>
 
 <script>
@@ -857,8 +881,8 @@ document.querySelectorAll('.quiz').forEach(function(quiz){
         render:'Works, but pointlessly heavier — you’re paying the mental overhead of a backend platform for a file that never needed one.',
         railway:'Massive overkill, and it starts burning a one-time trial credit for a job that costs nothing on Vercel.'
       }},
-    { id:'sc2', tag:'Traffic: business hours only · Cold-start tolerance: none · Budget: ~₹600/mo', txt:'The Dify chatbot needs to answer instantly, every time, all day during shop hours — a 45-second cold-start wait on the first message of the morning is not acceptable.', best:'render-paid', notes:{
-        vercel:'Doesn’t fit at all — Vercel’s Hobby tier can’t run Dify’s multi-service backend.',
+    { id:'sc2', tag:'Traffic: business hours only · Cold-start tolerance: none · Budget: ~₹600/mo', txt:'A small backend app needs to answer instantly, every time, all day during shop hours — a 45-second cold-start wait on the first request of the morning is not acceptable.', best:'render-paid', notes:{
+        vercel:'Doesn’t fit at all — Vercel’s Hobby tier can’t run an always-on backend service.',
         render:'Close, but the free instance spins down after 15 minutes idle — exactly the cold-start this scenario can’t tolerate. Needs the paid Standard tier, which the budget allows.',
         railway:'Technically possible, but the trial credit alone won’t cover always-on hours for a full month — you’d be back to a real bill fast anyway.'
       }},
@@ -867,7 +891,7 @@ document.querySelectorAll('.quiz').forEach(function(quiz){
         render:'A reasonable free-tier fit too — but Render’s spin-down could annoy testers checking in sporadically over two weeks.',
         railway:'A one-time trial credit is a genuinely good match for a short, bounded pilot — it’s built for exactly this "try it, decide later" window.'
       }},
-    { id:'sc4', tag:'Traffic: continuous, resource-heavy · Cold-start tolerance: none · Budget: small but nonzero', txt:'A resource-heavy self-hosted app (like the full Dify stack) that needs to run continuously with predictable performance.', best:'render-paid', notes:{
+    { id:'sc4', tag:'Traffic: continuous, resource-heavy · Cold-start tolerance: none · Budget: small but nonzero', txt:'A resource-heavy self-hosted app with several moving parts (its own server, database, and background workers) that needs to run continuously with predictable performance.', best:'render-paid', notes:{
         vercel:'Vercel’s serverless model can’t run a persistent, resource-heavy multi-container stack at all.',
         render:'Render’s free tier’s 512MB/0.1 CPU can’t fit this stack either — but Render’s paid Standard instance type is built for exactly this.',
         railway:'Possible, but the trial-credit model makes ongoing, predictable cost harder to reason about than Render’s flat monthly instance pricing.'
@@ -987,7 +1011,7 @@ document.querySelectorAll('.quiz').forEach(function(quiz){
 (function(){
   var files = {
     'config.js': [
-      { t:'export const APP_NAME = "Chapter One Chatbot";', leak:false },
+      { t:'export const APP_NAME = "Chapter One Restock Radar";', leak:false },
       { t:'export const GEMINI_API_KEY = "AIzaSyD-9f8k2n4Lp7qRtVxYzAbCdEfGhIjKlM";', leak:true },
       { t:'export const MAX_HISTORY_TURNS = 12;', leak:false },
       { t:'export const SUPPORT_EMAIL = "hello@chapterone.shop";', leak:false }
@@ -1002,8 +1026,8 @@ document.querySelectorAll('.quiz').forEach(function(quiz){
       { t:'        value: production', leak:false }
     ],
     'README.md': [
-      { t:'# Chapter One Chatbot', leak:false },
-      { t:'Deployed via Render Blueprint. See DEPLOY.md for steps.', leak:false },
+      { t:'# Chapter One Restock Radar', leak:false },
+      { t:'Deployed to Render and Railway. See DEPLOY.md for steps.', leak:false },
       { t:'// example only — not a real key: GEMINI_API_KEY=sk-example-DO-NOT-USE', leak:false },
       { t:'The real key is read from process.env.GEMINI_API_KEY at runtime.', leak:false }
     ]
@@ -1078,11 +1102,11 @@ document.querySelectorAll('.quiz').forEach(function(quiz){
 // ---------- SIM 4: Environment-Variable Vault ----------
 (function(){
   var items = [
-    { id:'i1', name:'Gemini API key (live, used by the deployed chatbot)', envSafe:true },
-    { id:'i2', name:'App display name: "Chapter One Chatbot"', envSafe:false, harmless:true },
-    { id:'i3', name:'Render Postgres connection string (includes a password)', envSafe:true },
+    { id:'i1', name:'Gemini API key (live, used by Restock Radar\'s urgency tagging)', envSafe:true },
+    { id:'i2', name:'App display name: "Chapter One Restock Radar"', envSafe:false, harmless:true },
+    { id:'i3', name:'Railway project token (grants deploy access)', envSafe:true },
     { id:'i4', name:'Public support email address', envSafe:false, harmless:true },
-    { id:'i5', name:'Dify admin dashboard password', envSafe:true }
+    { id:'i5', name:'Render deploy-hook URL (triggers a redeploy if known)', envSafe:true }
   ];
   var placed = {};
   var pool = document.getElementById('s4pool');
@@ -1120,7 +1144,7 @@ document.querySelectorAll('.quiz').forEach(function(quiz){
             verdict.innerHTML = '<b>' + leaks + ' real secret' + (leaks === 1 ? '' : 's') + ' landed in the public repo.</b> That’s exactly the near-miss GitHub’s secret scanning exists to catch — anything marked "LEAKED" above would already be discoverable the moment that repo went public.';
           } else {
             verdict.className = 'verdict good';
-            verdict.innerHTML = '<b>Clean.</b> Every real secret went into Render’s private Environment Variables panel; only genuinely harmless config ended up in the public repo. This is exactly the habit today’s Build 2 depends on.';
+            verdict.innerHTML = '<b>Clean.</b> Every real secret went into a private Environment/Variables panel — Render’s or Railway’s — and only genuinely harmless config ended up in the public repo. This is exactly the habit today’s Build 2 depends on.';
           }
         }
       });
