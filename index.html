@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 21 · Deploying AI Apps — Platforms, Hosting &amp; Going Live — Chapter One Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0f14;--bg2:#12161d;--card:#161b24;--card2:#1b212c;--line:#262e3b;--line2:#33405266;
+  --ink:#eef2f7;--ink2:#aab6c6;--ink3:#6d7a8c;
+  --orange:#ff8a2a;--orange2:#ffb066;--orange-dim:#ff8a2a22;
+  --teal:#3dd6c3;--teal-dim:#3dd6c31f;--violet:#a48bff;--violet-dim:#a48bff1f;
+  --gold:#ffd166;--rose:#ff6b8b;--green:#5fe08a;--red:#ff6161;
+  --mono:'JetBrains Mono',monospace;--serif:'Fraunces',serif;--sans:'Manrope',sans-serif;--r:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
+::selection{background:var(--orange);color:#111}
+.wrap{max-width:1020px;margin:0 auto;padding:0 26px}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.22}
+a{color:var(--orange2)}
+strong{color:var(--ink)}
+em{color:var(--orange2);font-style:normal}
+p{color:var(--ink2)}
+p strong{color:var(--ink)}
+#progressBar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--gold));width:0;z-index:999;transition:width .1s linear}
+.topnav{position:sticky;top:0;background:#0c0f14e8;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:900}
+.topnav .wrap{display:flex;align-items:center;gap:14px;padding-top:12px;padding-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.topnav .wrap::-webkit-scrollbar{display:none}
+.brand{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--orange);white-space:nowrap}
+.topnav a.nl{font-size:12.5px;font-weight:600;color:var(--ink3);text-decoration:none;white-space:nowrap;padding:5px 10px;border-radius:20px;transition:.2s}
+.topnav a.nl:hover{color:var(--orange);background:var(--orange-dim)}
+.hero{position:relative;padding:88px 0 70px;overflow:hidden;background:radial-gradient(1100px 480px at 78% -12%,#ff8a2a14,transparent 60%),radial-gradient(800px 400px at 8% 110%,#3dd6c30e,transparent 60%)}
+.hero .eyebrow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.06em;padding:6px 13px;border-radius:100px;border:1px solid var(--line);color:var(--ink2);background:var(--card)}
+.chip.hot{border-color:#ff8a2a55;color:var(--orange2);background:var(--orange-dim)}
+.chip.cool{border-color:#3dd6c355;color:var(--teal);background:var(--teal-dim)}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:640;letter-spacing:-.01em;margin-bottom:8px}
+.hero h1 .amp{color:var(--orange);font-style:italic;font-weight:500}
+.hero .sub{font-size:clamp(17px,2.2vw,21px);color:var(--ink2);max-width:740px;margin-top:16px}
+.hero .sub b{color:var(--ink)}
+.heroStats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+.hstat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.hstat .n{font-family:var(--serif);font-size:30px;font-weight:640;color:var(--orange)}
+.hstat .l{font-size:12px;color:var(--ink3);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+@media(max-width:760px){.heroStats{grid-template-columns:repeat(2,1fr)}}
+.agenda{margin-top:50px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 28px}
+.agenda h3{font-size:14px;font-family:var(--sans);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+.agRow{display:flex;align-items:center;flex-wrap:wrap;gap:14px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.agRow:last-child{border-bottom:none}
+.agRow .t{font-family:var(--mono);font-size:12px;color:var(--orange);min-width:86px;font-weight:500}
+.agRow .name{font-weight:600;font-size:15px;color:var(--ink);flex:1;min-width:180px}
+.agRow .tag{margin-left:auto;font-size:11px;font-family:var(--mono);color:var(--ink3);border:1px solid var(--line);padding:3px 10px;border-radius:100px;white-space:nowrap}
+.agRow .tag.simtag{color:var(--teal);border-color:#3dd6c344}
+section.blk{padding:74px 0 30px}
+.secHead{display:flex;align-items:baseline;gap:18px;margin-bottom:8px;flex-wrap:wrap}
+.secNum{font-family:var(--mono);font-size:13px;color:var(--orange);border:1px solid #ff8a2a55;background:var(--orange-dim);padding:5px 13px;border-radius:100px;font-weight:500;white-space:nowrap}
+.secHead h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.01em}
+.secTime{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-left:auto;white-space:nowrap}
+.secLede{font-size:18px;color:var(--ink2);max-width:800px;margin:12px 0 34px}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:44px 0 0}
+.say{position:relative;background:linear-gradient(180deg,#1a1410,#161b24);border:1px solid #ff8a2a33;border-left:3px solid var(--orange);border-radius:14px;padding:20px 24px 20px 26px;margin:22px 0}
+.say .who{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:10px}
+.say p{color:#e8dccb;font-size:15.5px;margin-bottom:10px}
+.say p:last-child{margin-bottom:0}
+.say.ask{border-left-color:var(--teal);border-color:#3dd6c333;background:linear-gradient(180deg,#101a19,#161b24)}
+.say.ask .who{color:var(--teal)}
+.say.do{border-left-color:var(--violet);border-color:#a48bff33;background:linear-gradient(180deg,#141021,#161b24)}
+.say.do .who{color:var(--violet)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;margin:20px 0}
+.card h3{font-size:21px;margin-bottom:10px}
+.card h4{font-size:17px;margin-bottom:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:820px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.defBox{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin:20px 0;position:relative}
+.defBox::before{content:'DEFINITION';position:absolute;top:-10px;left:20px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--gold);background:var(--bg);padding:2px 10px;border:1px solid #ffd16644;border-radius:100px}
+.defBox .term{font-family:var(--serif);font-size:19px;color:var(--gold);font-weight:600}
+.defBox p{margin-top:6px;font-size:15.5px}
+.useCase{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.25s;position:relative;overflow:hidden}
+.useCase:hover{border-color:#ff8a2a66;transform:translateY(-3px)}
+.useCase .ico{font-size:26px;margin-bottom:8px}
+.useCase .co{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.useCase h4{font-size:16px;margin:4px 0 6px;font-family:var(--sans);font-weight:700}
+.useCase p{font-size:13.5px;color:var(--ink2);line-height:1.55}
+.analogy{display:flex;gap:16px;background:linear-gradient(135deg,#1b1626,#161b24);border:1px solid #a48bff33;border-radius:14px;padding:20px 24px;margin:20px 0}
+.analogy .ic{font-size:30px;line-height:1}
+.analogy .tt{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);font-weight:700;margin-bottom:6px}
+.analogy p{font-size:15px;color:var(--ink2)}
+.analogy p b{color:var(--ink)}
+.note{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:14.5px;border:1px solid var(--line);background:var(--card2);color:var(--ink2)}
+.note b{color:var(--ink)}
+.note.beg{border-color:#5fe08a44}.note.beg b{color:var(--green)}
+.note.adv{border-color:#ff6b8b44}.note.adv b{color:var(--rose)}
+.note.pro{border-color:#ffd16644}.note.pro b{color:var(--gold)}
+table.tbl{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+table.tbl th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);text-align:left;padding:10px 14px;border-bottom:1px solid #ff8a2a44;font-weight:500}
+table.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
+table.tbl tr:hover td{background:#ffffff05}
+table.tbl td:first-child{color:var(--ink);font-weight:600}
+code.k{font-family:var(--mono);font-size:.86em;background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--orange2)}
+pre.code{font-family:var(--mono);font-size:13px;line-height:1.7;background:#0a0d12;border:1px solid var(--line);border-radius:12px;padding:18px 22px;overflow-x:auto;margin:16px 0;color:#c7d2e0}
+pre.code .cm{color:#5b6b7f}
+pre.code .st{color:#8fd8a0}
+pre.code .fn{color:#7cc4ff}
+pre.code .kw{color:var(--orange2)}
+.codeWrap{position:relative}
+.copyBtn{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:#c7d2e0;background:#171d27;border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer;transition:background .15s,border-color .15s}
+.copyBtn:hover{background:#212938;border-color:#3dd6c355}
+.copyBtn.copied{background:#12362d;border-color:#3dd6c3;color:#8fd8a0}
+.sim{background:linear-gradient(180deg,#101620,#0e131b);border:1px solid #3dd6c344;border-radius:20px;padding:26px 28px;margin:30px 0;position:relative}
+.sim::before{content:'\26A1 INTERACTIVE SIMULATOR';position:absolute;top:-12px;left:22px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--teal);background:var(--bg);padding:3px 12px;border:1px solid #3dd6c355;border-radius:100px;font-weight:700}
+.sim h3{font-size:20px;margin-bottom:4px}
+.sim .simSub{font-size:14px;color:var(--ink3);margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:700;font-size:13.5px;color:#161009;background:linear-gradient(180deg,var(--orange2),var(--orange));border:none;border-radius:100px;padding:10px 20px;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px #ff8a2a44}
+.btn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--orange);color:var(--orange);box-shadow:none}
+.btn.sm{padding:7px 15px;font-size:12.5px}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.quiz{background:linear-gradient(180deg,#151021,#12161d);border:1px solid #a48bff44;border-radius:20px;padding:26px 28px;margin:34px 0;position:relative}
+.quiz::before{content:'\2726 CHECKPOINT QUIZ';position:absolute;top:-12px;left:22px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--violet);background:var(--bg);padding:3px 12px;border:1px solid #a48bff55;border-radius:100px;font-weight:700}
+.quiz .q{font-family:var(--serif);font-size:19px;font-weight:600;margin:6px 0 18px;color:var(--ink)}
+.opt{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 17px;margin:9px 0;cursor:pointer;transition:.2s;font-size:14.5px;color:var(--ink2)}
+.opt:hover{border-color:var(--violet)}
+.opt .ab{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--violet);border:1px solid #a48bff55;border-radius:8px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt.correct{border-color:var(--green);background:#5fe08a12;color:var(--ink)}
+.opt.correct .ab{color:var(--green);border-color:var(--green)}
+.opt.wrong{border-color:var(--red);background:#ff616112;opacity:.75}
+.opt.wrong .ab{color:var(--red);border-color:var(--red)}
+.opt.locked{pointer-events:none}
+.quizWhy{display:none;margin-top:16px;border-top:1px dashed #a48bff44;padding-top:16px;font-size:14.5px;color:var(--ink2)}
+.quizWhy.show{display:block;animation:fadeUp .4s ease}
+.quizWhy b{color:var(--violet)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+.svgWrap{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin:24px 0;overflow-x:auto}
+.svgWrap svg,.svgWrap img{display:block;margin:0 auto;max-width:100%;height:auto;border-radius:10px}
+.svgCap{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--ink3);margin-top:14px;letter-spacing:.04em}
+.bigQuote{font-family:var(--serif);font-size:clamp(21px,3vw,28px);font-weight:500;font-style:italic;color:var(--ink);text-align:center;max-width:780px;margin:50px auto;line-height:1.5}
+.bigQuote em{color:var(--orange);font-style:italic}
+.footer{border-top:1px solid var(--line);margin-top:80px;padding:44px 0 60px;text-align:center}
+.footer p{font-size:13px;color:var(--ink3)}
+.slackDrop{background:linear-gradient(120deg,#12201e,#0f1720);border:1px solid #3dd6c355;border-radius:14px;padding:16px 20px;margin:18px 0;display:flex;gap:14px;align-items:flex-start}
+.slackDrop .av{font-size:26px}
+.slackDrop .nm{font-weight:700;color:var(--teal);font-size:14px}
+.slackDrop .tm{font-family:var(--mono);font-size:10.5px;color:var(--ink3);margin-left:8px}
+.slackDrop p{font-size:14px;color:var(--ink2);margin-top:4px}
+.pickRow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.pickBtn{font-family:var(--sans);font-weight:700;font-size:12.5px;background:#141b26;color:var(--ink2);border:1px solid var(--line);border-radius:9px;padding:9px 14px;cursor:pointer;transition:.2s;text-align:left}
+.pickBtn:hover{border-color:var(--orange)}
+.pickBtn.on{background:var(--orange-dim);border-color:var(--orange);color:var(--orange2)}
+.pickGroup{margin-bottom:14px}
+.pickGroup .pgl{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block}
+.matchWhy{margin-top:14px;font-size:14px;color:var(--ink2);min-height:24px}
+.matchWhy b{color:var(--teal)}
+.matchScore{font-family:var(--mono);font-size:12px;color:var(--gold);border:1px solid #ffd16655;background:#ffd16611;border-radius:100px;padding:6px 14px;display:inline-block;margin-top:6px}
+.runLog{background:#0a0d12;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-family:var(--mono);font-size:11.5px;line-height:1.85;color:var(--ink2);min-height:80px;max-height:280px;overflow-y:auto;margin-top:12px}
+.runLog .lg{display:block}
+.runLog .lg.ok{color:var(--green)}.runLog .lg.err{color:var(--rose)}.runLog .lg.warn{color:var(--gold)}.runLog .lg.dim{color:var(--ink3)}
+.verdict{border-radius:12px;padding:14px 18px;margin-top:14px;font-size:14px;border:1px solid var(--line);background:var(--card2);color:var(--ink2)}
+.verdict b{color:var(--ink)}
+.verdict.good{border-color:#5fe08a55;background:#5fe08a0e}.verdict.good b{color:var(--green)}
+.verdict.bad{border-color:#ff616155;background:#ff61610e}.verdict.bad b{color:var(--rose)}
+.verdict.mid{border-color:#ffd16655;background:#ffd1660e}.verdict.mid b{color:var(--gold)}
+.twoCol{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+@media(max-width:820px){.twoCol{grid-template-columns:1fr}}
+.colCard{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.colCard .ct{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.colCard p{font-size:13.5px}
+.chalCard{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:18px 0;overflow:hidden;transition:.25s}
+.chalCard.open{border-color:#3dd6c366}
+.chalHead{display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer}
+.chalHead .cn{font-family:var(--mono);font-size:12px;color:var(--teal);border:1px solid #3dd6c355;border-radius:8px;padding:4px 10px;font-weight:700}
+.chalHead h4{font-family:var(--serif);font-size:19px;flex:1}
+.chalHead .chev{font-family:var(--mono);color:var(--ink3);transition:.3s}
+.chalCard.open .chev{transform:rotate(90deg);color:var(--teal)}
+.chalBody{display:none;padding:0 22px 22px}
+.chalCard.open .chalBody{display:block;animation:fadeUp .4s ease}
+.chalBody .cLabel{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:16px 0 6px}
+.chalBody .mission{color:var(--ink2);font-size:14.5px}
+.switchRow{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#0a0d12;border:1px solid var(--line);border-radius:12px;padding:13px 17px;margin:9px 0}
+.switchRow .swl{font-size:13.5px;color:var(--ink2)}
+.switchRow .swl b{color:var(--ink);display:block;font-size:14.5px;margin-bottom:2px}
+.swBtn{font-family:var(--mono);font-weight:700;font-size:11.5px;letter-spacing:.06em;border:1px solid var(--line);background:#141b26;color:var(--ink3);border-radius:100px;padding:7px 16px;cursor:pointer;transition:.2s;min-width:64px;text-align:center}
+.swBtn.on{border-color:var(--green);background:#5fe08a1a;color:var(--green)}
+.transcriptCard{background:#0f141b;border:1px solid var(--line);border-radius:14px;padding:0;margin-top:16px;overflow:hidden}
+.transcriptCard .th{background:#141b26;border-bottom:1px solid var(--line);padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--ink3);display:flex;justify-content:space-between}
+.transcriptCard .tb{padding:16px 18px;font-size:13.5px;color:var(--ink2);line-height:1.7;white-space:pre-wrap;min-height:60px}
+.choiceRow{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.choiceBtn{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#141b26;border:1px solid var(--line);border-radius:12px;padding:12px 16px;cursor:pointer;transition:.2s;font-family:var(--sans);font-size:13.5px;color:var(--ink2)}
+.choiceBtn:hover{border-color:var(--orange)}
+.choiceBtn.good{border-color:var(--green);background:#5fe08a12;color:var(--ink)}
+.choiceBtn.bad{border-color:var(--rose);background:#ff6b8b12;color:var(--ink)}
+.choiceBtn .cico{font-size:16px;flex-shrink:0}
+.verifyHead{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin:18px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
+.verifySteps{list-style:none;counter-reset:vs;margin:0;padding:0}
+.verifySteps li{counter-increment:vs;position:relative;padding:0 0 0 34px;margin:0 0 12px;font-size:13.5px;color:var(--ink2);line-height:1.6}
+.verifySteps li:last-child{margin-bottom:0}
+.verifySteps li::before{content:counter(vs);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:100px;background:#141b26;border:1px solid var(--line);color:var(--orange2);font-family:var(--mono);font-size:11px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center}
+.verifySteps li b{color:var(--ink)}
+.verifySteps li code{background:#141b26;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12px;color:var(--gold);white-space:nowrap}
+.realGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+@media(max-width:820px){.realGrid{grid-template-columns:1fr}}
+.realCard{background:linear-gradient(180deg,#1a1113,#161b24);border:1px solid #ff6b8b3a;border-radius:14px;padding:20px 22px}
+.realCard .rtag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);font-weight:700;margin-bottom:10px}
+.realCard h4{font-size:16.5px;margin-bottom:8px;color:var(--ink)}
+.realCard p{font-size:14px;color:var(--ink2);line-height:1.65}
+.realCard p b{color:var(--ink)}
+.meter{margin:10px 0}
+.meter .mtl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.meter .mtl .mtv{color:var(--ink);font-weight:700}
+.meter .mtBar{height:9px;border-radius:100px;background:#181f2b;border:1px solid var(--line);overflow:hidden}
+.meter .mtFill{height:100%;width:0;border-radius:100px;transition:width .45s ease}
+.meter .mtFill.g{background:var(--green)}.meter .mtFill.o{background:var(--orange)}.meter .mtFill.r{background:var(--red)}.meter .mtFill.t{background:var(--teal)}
+.stepperRow{display:flex;gap:24px;flex-wrap:wrap;margin:16px 0}
+.stepperGroup{display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:var(--ink3)}
+.stepperGroup>div{display:flex;align-items:center;gap:10px}
+.stepperBtn{font-family:var(--mono);font-weight:700;font-size:15px;background:#141b26;color:var(--ink2);border:1px solid var(--line);border-radius:8px;width:30px;height:30px;cursor:pointer}
+.stepperBtn:hover{border-color:var(--orange);color:var(--orange)}
+.stepperVal{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--ink);min-width:20px;text-align:center}
+.churnRow{display:flex;align-items:flex-start;gap:14px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 17px;margin:9px 0}
+.churnRow .crIco{font-size:20px;flex-shrink:0}
+.churnRow .crBody{flex:1}
+.churnRow .crName{font-weight:700;color:var(--ink);font-size:14.5px;margin-bottom:3px}
+.churnRow .crTxt{font-size:13px;color:var(--ink2);line-height:1.6}
+.churnRow .crTag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border-radius:100px;padding:3px 10px;white-space:nowrap;flex-shrink:0;align-self:center}
+.churnRow .crTag.dead{color:var(--rose);border:1px solid #ff6b8b55;background:#ff6b8b12}
+.churnRow .crTag.renamed{color:var(--gold);border:1px solid #ffd16655;background:#ffd16612}
+.churnRow .crTag.alive{color:var(--green);border:1px solid #5fe08a55;background:#5fe08a12}
+/* ---- Class 21 additions — deployment / hosting / secrets visual language ---- */
+.prepRow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px;color:var(--ink2);gap:14px;flex-wrap:wrap}
+.prepRow:last-child{border-bottom:none}
+.prepRow b{color:var(--ink);white-space:nowrap}
+/* SIM1 — platform-picker scenario scorer */
+.scenCard{background:#141b26;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
+.scenCard .scenTag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.scenCard .scenTxt{font-size:14.5px;color:var(--ink);margin-bottom:12px;line-height:1.55}
+.scenBtnRow{display:flex;gap:9px;flex-wrap:wrap}
+.scenBtn{flex:1;min-width:120px;font-family:var(--sans);font-weight:700;font-size:12.5px;background:#0f141b;border:1px solid var(--line);color:var(--ink2);border-radius:9px;padding:10px 12px;cursor:pointer;transition:.2s;text-align:center}
+.scenBtn:hover{border-color:var(--orange)}
+.scenBtn:disabled{opacity:.35;cursor:not-allowed}
+.scenBtn.chosen.good{border-color:var(--green);background:#5fe08a12;color:var(--ink)}
+.scenBtn.chosen.bad{border-color:var(--rose);background:#ff6b8b12;color:var(--ink)}
+.scenVerdict{font-size:13px;color:var(--ink2);margin-top:11px;display:none;line-height:1.55;padding-top:11px;border-top:1px dashed var(--line)}
+.scenCard.done .scenVerdict{display:block}
+.scenScoreRow{display:flex;gap:22px;margin-top:16px;font-family:var(--mono);font-size:12.5px;color:var(--ink3);flex-wrap:wrap}
+.scenScoreRow b{color:var(--ink);font-size:16px}
+/* SIM2 — deploy pipeline race */
+.stageRow{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+.stageBtn{font-family:var(--mono);font-weight:700;font-size:11.5px;letter-spacing:.02em;background:#141b26;border:1px solid var(--line);color:var(--ink2);border-radius:9px;padding:10px 14px;cursor:pointer;transition:.2s}
+.stageBtn:hover{border-color:var(--orange)}
+.stageBtn.done{border-color:var(--green);background:#5fe08a1a;color:var(--green)}
+.stageBtn.failedstage{border-color:var(--rose);background:#ff6b8b1a;color:var(--rose)}
+.pipeUrl{font-family:var(--mono);font-size:13px;color:var(--teal);margin-top:12px;display:none;background:#0a0d12;border:1px solid #3dd6c355;border-radius:10px;padding:11px 15px}
+.pipeUrl.show{display:block;animation:fadeUp .4s ease}
+/* SIM3 — spot the hardcoded secret */
+.codeTabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.codeTab{font-family:var(--mono);font-size:11.5px;font-weight:700;background:#141b26;border:1px solid var(--line);color:var(--ink3);border-radius:8px;padding:7px 13px;cursor:pointer;transition:.2s}
+.codeTab:hover{border-color:var(--orange)}
+.codeTab.on{border-color:var(--orange);color:var(--orange2);background:var(--orange-dim)}
+.codeTab.clear .fmark{color:var(--ink3)}
+.codeFile{background:#0a0d12;border:1px solid var(--line);border-radius:12px;padding:10px 0;font-family:var(--mono);font-size:12.5px;line-height:1.9;overflow-x:auto}
+.codeLn{display:flex;gap:12px;padding:2px 18px;cursor:pointer;white-space:pre}
+.codeLn:hover{background:#ffffff08}
+.codeLn .lnNo{color:#43506380;min-width:20px;text-align:right;user-select:none}
+.codeLn .lnTxt{color:#c7d2e0}
+.codeLn.flagged{background:#ffd1660f}
+.codeLn.flagged .lnNo{color:var(--gold)}
+.codeLn.hit{background:#5fe08a14}
+.codeLn.hit .lnNo{color:var(--green)}
+.codeLn.miss{background:#ff6b8b14}
+.codeLn.miss .lnNo{color:var(--rose)}
+.codeLn.falsepos{background:#ff6b8b14}
+.codeLn.falsepos .lnNo{color:var(--rose)}
+.scanScoreRow{display:flex;gap:20px;margin-top:14px;font-family:var(--mono);font-size:12.5px;color:var(--ink3);flex-wrap:wrap}
+.scanScoreRow b{color:var(--ink);font-size:16px}
+/* SIM4 — env-var vault */
+.vaultGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+@media(max-width:760px){.vaultGrid{grid-template-columns:1fr}}
+.vaultZone{background:#0a0d12;border:2px dashed var(--line);border-radius:14px;padding:14px 16px;min-height:150px}
+.vaultZone .vzTitle{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.vaultZone.env .vzTitle{color:var(--teal)}
+.vaultZone.pub .vzTitle{color:var(--rose)}
+.vzItem{background:#141b26;border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;color:var(--ink2);margin-bottom:7px;animation:popIn .3s ease}
+.vzItem.safe{border-color:var(--green);color:var(--ink)}
+.vzItem.leak{border-color:var(--rose);color:var(--ink);background:#ff6b8b14}
+.secretPool{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.secretCard{background:#141b26;border:1px solid var(--line);border-radius:12px;padding:12px 15px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.secretCard .scName{flex:1;min-width:180px;font-size:13.5px;color:var(--ink)}
+.secretCard .scBtns{display:flex;gap:7px}
+.secretCard.placed{opacity:.4}
+.vaultReadout{margin-top:6px}
+/* SIM5 — free-tier usage dial */
+.dialTabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.dialTab{font-family:var(--mono);font-weight:700;font-size:11.5px;background:#141b26;border:1px solid var(--line);color:var(--ink3);border-radius:9px;padding:8px 14px;cursor:pointer;transition:.2s}
+.dialTab.on{border-color:var(--teal);color:var(--teal);background:var(--teal-dim)}
+.dialWrap{margin:14px 0}
+.dialBar{height:22px;border-radius:100px;background:#181f2b;border:1px solid var(--line);overflow:hidden;position:relative}
+.dialFill{height:100%;width:0;border-radius:100px;transition:width .4s ease;background:linear-gradient(90deg,var(--teal),var(--gold))}
+.dialFill.ceiling{background:linear-gradient(90deg,var(--gold),var(--red))}
+.dialLabel{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--ink3);margin-top:6px}
+.dialLabel b{color:var(--ink)}
+.ceilingCard{border-radius:12px;padding:14px 18px;margin-top:14px;font-size:13.5px;border:1px solid var(--line);background:var(--card2);color:var(--ink2);display:none}
+.ceilingCard.show{display:block;animation:fadeUp .4s ease}
+.ceilingCard b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="progressBar"></div>
+<nav class="topnav"><div class="wrap">
+<span class="brand">🚀 Scaler AIML · Class 21</span>
+<a class="nl" href="#open">The Laptop Problem</a>
+<a class="nl" href="#platforms">Pick a Platform</a>
+<a class="nl" href="#build1">Build 1 · Vercel</a>
+<a class="nl" href="#secrets">Env Vars &amp; Secrets</a>
+<a class="nl" href="#build2">Build 2 · Render</a>
+<a class="nl" href="#limits">Free-Tier Limits</a>
+<a class="nl" href="#live">Going Live For Real</a>
+<a class="nl" href="#takehome">Take-Home</a>
+<a class="nl" href="#wrap">Wrap-Up</a>
+</div></nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">
+    <span class="chip hot">CLASS 21 / SESSION SCRIPT</span>
+    <span class="chip">DEPLOYING AI APPS · PLATFORMS &amp; HOSTING</span>
+    <span class="chip cool">VERCEL · RENDER · GITHUB · DIFY</span>
+    <span class="chip">FREE TIER FIRST</span>
+  </div>
+  <h1>It Works On My Laptop Isn't Shipped. <span class="amp">A Live URL Is Shipped.</span></h1>
+  <p class="sub"><b>Nikhil built something genuinely good last month, and the only way to see it is to be standing next to his laptop with the lid open.</b> Today closes that gap — not with a new tool, not with a new feature, but by taking two things you already built and putting them on the open internet, for free, with the API keys kept out of sight the whole time.</p>
+
+  <div class="slackDrop" style="margin-top:32px">
+    <div class="av">👓</div>
+    <div><span class="nm">Ravi → Chapter One (shop group)</span><span class="tm">6:48 PM · Monday</span>
+    <p>"Nikhil showed me the shelf-talker thing on his laptop just now — genuinely nice, the print layout is clean. Then I asked Sarita to pull it up on her phone. She can't. I asked if Tara's seen it. She hasn't. Close that laptop lid and, as far as the rest of the shop is concerned, it doesn't exist. Compare that to the sign-up page from the same class — that one had a link before anyone even asked for one. What's different?"</p></div>
+  </div>
+  <p style="font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange2);margin-top:14px">🚀🔗🔒 Today's rule: a live URL beats a laptop demo every time — and the API key never rides along in the same commit.</p>
+
+  <div class="heroStats">
+    <div class="hstat"><div class="n" data-count="2">0</div><div class="l">Existing Apps Deployed Live</div></div>
+    <div class="hstat"><div class="n" data-count="3">0</div><div class="l">Hosting Platforms Compared</div></div>
+    <div class="hstat"><div class="n" data-count="5">0</div><div class="l">Live Simulators</div></div>
+    <div class="hstat"><div class="n" data-count="0">0</div><div class="l">Rupees Spent</div></div>
+  </div>
+  <div class="agenda">
+    <h3>Today's Flight Plan · ~115 Minutes</h3>
+    <div class="agRow"><span class="t">00:00–00:06</span><span class="name">The Laptop Problem — a cold open</span><span class="tag">SETUP</span></div>
+    <div class="agRow"><span class="t">00:06–00:18</span><span class="name">Pick a Platform — Vercel vs. Render vs. Railway</span><span class="tag simtag">SIM + QUIZ</span></div>
+    <div class="agRow"><span class="t">00:18–00:38</span><span class="name">Build 1 — shelf-talker.html → GitHub → Vercel, live URL</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
+    <div class="agRow"><span class="t">00:38–00:46</span><span class="name">☕ Stretch break</span><span class="tag">BREAK</span></div>
+    <div class="agRow"><span class="t">00:46–01:02</span><span class="name">Environment Variables &amp; API Key Security</span><span class="tag simtag">SIM + QUIZ</span></div>
+    <div class="agRow"><span class="t">01:02–01:26</span><span class="name">Build 2 — the Dify chatbot → a real deploy on Render</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
+    <div class="agRow"><span class="t">01:26–01:40</span><span class="name">Free-Tier Limits — where each platform's ceiling actually is</span><span class="tag simtag">SIM + QUIZ</span></div>
+    <div class="agRow"><span class="t">01:40–01:50</span><span class="name">Going Live For Real — webhooks, custom domains, portfolio value</span><span class="tag">DISCUSSION</span></div>
+    <div class="agRow"><span class="t">01:50–02:00</span><span class="name">Take-Home &amp; Wrap-Up</span><span class="tag">3 CHALLENGES</span></div>
+  </div>
+</div></header>
+
+<!-- ============ SECTION: OPEN ============ -->
+<section class="blk" id="open"><div class="wrap">
+  <div class="secHead"><span class="secNum">SETUP</span><h2>The Laptop Problem</h2><span class="secTime">⏱ 6 min</span></div>
+  <p class="secLede">Two things were built in this course. Only one of them has ever left the building.</p>
+
+  <div class="say">
+    <span class="who">🎙 Instructor Says — Cold Open</span>
+    <p>"Quick recap, because today's whole hook depends on remembering both halves of it. A few classes back, Nikhil built <b>two</b> things for Chapter One in the same afternoon. Build 1 was in Lovable — a browser chat tool — and the moment he clicked Publish, it had a live web address. Sarita opened it on her phone before Nikhil had even left the counter. Build 2 was <code class="k">shelf-talker.html</code> — a single file built in VS Code with GitHub Copilot, deliberately built as a plain file so Tara could tweak it herself at eleven at night. It works beautifully. It also only runs by double-clicking it — on Nikhil's laptop, specifically."</p>
+    <p>"Ravi's message above is the whole problem in one paragraph: <b>Lovable already gave you a link without asking. Everything else you've built hasn't.</b> Sarita can't see the shelf-talker page. Tara can't see it. And the day Nikhil's laptop is closed, or lost, or just at home, that file is functionally gone — not broken, just <em>unreachable</em>, which for anyone who isn't Nikhil amounts to the same thing. Today closes that exact gap, for good, for free."</p>
+  </div>
+
+  <div class="card">
+    <h3>Chapter One — the cast, unchanged</h3>
+    <div class="grid4">
+      <div class="useCase"><div class="ico">🛠</div><div class="co">Builds it</div><h4>Nikhil</h4><p>Works the counter. Has built two real things now — a live one and a laptop-only one. Today he learns the difference isn't the code, it's what happens after.</p></div>
+      <div class="useCase"><div class="ico">📖</div><div class="co">Owner</div><h4>Sarita</h4><p>Wants to be able to open a link on her own phone and see the thing working, without asking Nikhil to unlock his laptop first.</p></div>
+      <div class="useCase"><div class="ico">☕</div><div class="co">Reading club</div><h4>Tara</h4><p>The source of every new ask this term. Wants to send the shelf-talker link to the other three staff who print cards, not just Nikhil.</p></div>
+      <div class="useCase"><div class="ico">👓</div><div class="co">Actual developer</div><h4>Ravi</h4><p>Noticed the gap before anyone else did. Today's voice for "a demo and a product are not the same claim."</p></div>
+    </div>
+  </div>
+
+  <div class="note beg"><b>Why this class exists:</b> nothing you build today is new. The shelf-talker page from Class 17 and the Dify chatbot from earlier this course are both finished, working software. The only thing missing is a public address and a safe way to hold the one secret they each depend on. That's deployment — not a new skill on top of building, the last 20% that turns "I built a thing" into "here's the link."</p></div>
+
+  <div class="say ask">
+    <span class="who">💬 Chat Drop — 45 sec</span>
+    <p>"Type one thing you've built in this course — in any class — that still only runs on your own laptop. Would anyone else in your life actually be able to open it right now, without you sitting next to them? Keep that honest answer on screen."</p>
+  </div>
+
+  <div class="note pro"><b>Instructor — before you teach this live:</b> §2's Vercel import and §4's Render environment-variable steps were pulled from vercel.com/docs and render.com/docs directly (Sept 2026) — re-diff the exact button labels the night before, this category of UI reshuffles menus more than most. Also re-confirm Railway's current pricing page before class: as of this writing Railway has no standing free tier, only a one-time trial credit, and §1's comparison table reflects that honestly rather than the curriculum's original "free tier" framing.</div>
+</div></section>
+
+<!-- ============ SECTION 1: PICK A PLATFORM ============ -->
+<section class="blk" id="platforms"><div class="wrap">
+  <div class="secHead"><span class="secNum">§ 1</span><h2>Pick a Platform — Vercel vs. Render vs. Railway</h2><span class="secTime">⏱ 12 min</span></div>
+  <p class="secLede">Three names get thrown around interchangeably as "free hosting." As of today, they are not the same offer — and picking the wrong one for the job costs either money or reliability.</p>
+
+  <div class="analogy">
+    <div class="ic">🏠</div>
+    <div><div class="tt">The Analogy</div>
+    <p>Think of these as three kinds of premises for a shop. <b>Vercel</b> is a display window — brilliant for something that just sits there and shows itself, cheap to keep lit, but you can't run a kitchen behind it. <b>Render</b> is a small rented kitchen — it can actually cook (run a real backend), but if nobody's ordering for fifteen minutes straight, the stove goes cold and the next order takes a minute to get going again. <b>Railway</b> used to hand out a starter kitchen for free indefinitely; today it hands you a one-time voucher that runs out.</p></div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Platform</th><th>What it's actually free for (Sept 2026)</th><th>The real gotcha</th></tr>
+    <tr><td>Vercel (Hobby)</td><td>Forever-free for static sites and light serverless functions. 100GB bandwidth/month, 100K function invocations, 10-second max function duration, custom domains included.</td><td><b>Personal, non-commercial use only</b> — the Hobby plan's terms explicitly forbid client work and commercial SaaS. A bookshop's internal tool is fine; selling the tool to other bookshops isn't.</td></tr>
+    <tr><td>Render (Free web service)</td><td>750 free instance-hours/month, real Docker-capable backends, free PostgreSQL (30-day expiry).</td><td><b>Spins down after 15 minutes of inactivity.</b> The next request wakes it back up — but that first visitor waits 30–60 seconds staring at a loading spinner.</td></tr>
+    <tr><td>Railway</td><td>A one-time <b>$5 trial credit</b>, no card required to start. That's it — there is no longer a standing free tier.</td><td>A single small always-on service burns the entire $5 credit in about three weeks. After that it's a real bill, starting around $5/month minimum.</td></tr>
+  </table>
+
+  <div class="note adv"><b>Curriculum honesty flag:</b> the original course material names Railway alongside Render as a "free tier" deploy target for Build 2. Live research for this class (Sept 2026) found Railway removed its permanent free tier back in 2024 — what remains is a one-time trial credit that behaves nothing like an ongoing free plan. Following this series' standing rule (same call made for Telegram in Class 11 and Windsurf in Class 17): Railway stays in the comparison table and gets a one-line mention as an option, but today's actual hands-on Build 2 uses <b>Render</b>, which still has a genuine, renewing-every-month free tier.</div>
+
+  <div class="say">
+    <span class="who">🎙 Instructor Says</span>
+    <p>"Map this onto the two things Nikhil built. The shelf-talker page is one static HTML file — no server, no database, nothing that needs to 'run' continuously. That's a <b>display window</b> — Vercel, easily, forever free. The Dify chatbot is a real running application with its own server, database and background workers behind it — that needs an actual kitchen. That's Render, not Vercel — Vercel's free tier can't run something like that at all."</p>
+  </div>
+
+  <!-- SIM 1 -->
+  <div class="sim" id="sim1">
+    <h3>SIM 1 · Match the Job to the Platform</h3>
+    <p class="simSub">Five real deployment requests, one at a time. Each has an actual traffic pattern, a cold-start tolerance, and a budget — there's no single "always right" platform, only the one that fits <em>this</em> job. Pick one for each; the readout tells you what you actually bought.</p>
+
+    <div id="s1scenarios"></div>
+
+    <div class="scenScoreRow">
+      <span>Good fits: <b id="s1good">0</b></span>
+      <span>Mismatches: <b id="s1bad">0</b></span>
+      <span>Scenarios decided: <b id="s1done">0</b>/5</span>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz1">
+    <div class="q">Q1. Sarita wants to post the shelf-talker link on Chapter One's Instagram story, expecting a short traffic spike, then near-zero visits after. Zero budget. Which platform actually fits, and why?</div>
+    <div class="opt" data-c="0"><span class="ab">A</span><span>Vercel — it's a static file with no backend, the free tier handles spiky traffic on a display-only page for nothing, and there's no cold-start penalty because there's no server to spin down.</span></div>
+    <div class="opt" data-c="1"><span class="ab">B</span><span>Render's free tier — since it can run backends, it's automatically the safer choice for a traffic spike.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>Railway — the trial credit is generous enough that budget was never actually a real constraint here.</span></div>
+    <div class="quizWhy">Correct answer: <b>A</b>. A static file has nothing to "spin down" — Vercel serves it instantly at any traffic level within the free tier's generous limits, for a workload that never needed a real backend in the first place.</div>
+  </div>
+</div></section>
+
+<div class="divider"></div>
+
+<!-- ============ SECTION 2: BUILD 1 — VERCEL ============ -->
+<section class="blk" id="build1"><div class="wrap">
+  <div class="secHead"><span class="secNum">§ 2 · Build 1</span><h2>shelf-talker.html → GitHub → Vercel, Live in Minutes</h2><span class="secTime">⏱ 20 min</span></div>
+  <p class="secLede">No new code today. The exact same file from Class 17, pushed to a place Vercel can see it, and given a public address.</p>
+
+  <div class="defBox">
+    <span class="term">Why a single HTML file is the easiest possible deploy target</span>
+    <p>There's no build step, no dependencies to install, no server code to run — the whole "application" is one file a browser can already open. Deploying it is really just: put the file somewhere Vercel can fetch it, and let Vercel serve it to anyone who asks. That's the entire job. Nothing about deployment is conceptually different for a complex app — it just has more moving parts to wire up.</p>
+  </div>
+
+  <div class="say do">
+    <span class="who">🛠 Instructor Does — live, on screen</span>
+    <p>Starting point: the exact <code class="k">shelf-talker.html</code> file from Class 17, sitting untouched in a folder on Nikhil's laptop. Nothing in it changes today.</p>
+  </div>
+
+  <ol class="verifySteps">
+    <li><b>Turn the folder into a git repository.</b> Open a terminal in the folder containing <code class="k">shelf-talker.html</code> and run:
+      <div class="codeWrap"><button class="copyBtn" type="button">Copy</button><pre class="code"><span class="cm"># Terminal — run inside the shelf-talker folder</span>
+<span class="fn">git</span> init
+<span class="fn">git</span> add shelf-talker.html
+<span class="fn">git</span> commit -m <span class="st">"shelf-talker: first commit"</span></pre></div>
+    </li>
+    <li><b>Create an empty repository on GitHub</b> — <code class="k">github.com/new</code>, name it <code class="k">shelf-talker</code>, leave "Add a README" unchecked (Nikhil's folder already has the one file that matters), click <b>Create repository</b>.</li>
+    <li><b>Push the local commit up</b> — GitHub shows the exact two commands right after creation; they look like this (copy the ones GitHub actually shows you, the username changes):
+      <div class="codeWrap"><button class="copyBtn" type="button">Copy</button><pre class="code"><span class="cm"># Terminal — GitHub gives you these exact lines after creating the repo</span>
+<span class="fn">git</span> remote add origin https://github.com/nikhil-chapterone/shelf-talker.git
+<span class="fn">git</span> branch -M main
+<span class="fn">git</span> push -u origin main</pre></div>
+    </li>
+    <li><b>Sign up for Vercel</b> at <code class="k">vercel.com/signup</code> using <b>"Continue with GitHub"</b> — this is the step that lets Vercel see your repositories at all.</li>
+    <li><b>Import the repository:</b> on the Vercel dashboard click <b>Add New…</b> → <b>Project</b>. Under "Import Git Repository," find <code class="k">shelf-talker</code> in the list and click <b>Import</b>.</li>
+    <li><b>Leave every setting on default.</b> Vercel will try to guess a framework — for a plain HTML file there's nothing to configure: no build command, no output directory override needed. Click <b>Deploy</b>.</li>
+    <li><b>Watch the build log</b> for about 15–30 seconds, then Vercel shows a confetti screen with a live URL — something like <code class="k">shelf-talker-nikhil.vercel.app</code>. Click it. That's the file, live, on the open internet.</li>
+    <li><b>Optional, one line:</b> under <b>Project Settings → Domains</b>, Vercel lets you attach a real custom domain (like <code class="k">shelf.chapterone.shop</code>) on the free Hobby plan at no extra cost — you'd only pay for buying the domain name itself, not for Vercel to serve it.</li>
+  </ol>
+
+  <div class="note pro"><b>Instructor — verify before you teach this live:</b> re-check the exact Vercel dashboard button labels ("Add New…" → "Project," the Import Git Repository screen) against <a href="https://vercel.com/docs/git" target="_blank" rel="noopener">vercel.com/docs/git</a> the night before — dashboard copy shifts between releases more than the underlying mechanics do.</div>
+
+  <!-- SIM 2 -->
+  <div class="sim" id="sim2">
+    <h3>SIM 2 · Run the Deploy Pipeline — Order Matters</h3>
+    <p class="simSub">Six stages, same six as the verify-steps above. Click them in any order you like — the build log reacts honestly. Skip ahead and you'll see exactly the error a skipped step actually produces.</p>
+
+    <div class="stageRow" id="s2stages"></div>
+    <button class="btn sm ghost" id="s2reset">↺ Reset Pipeline</button>
+
+    <div class="runLog" id="s2log"></div>
+    <div class="pipeUrl" id="s2url"></div>
+  </div>
+
+  <div class="quiz" id="quiz2">
+    <div class="q">Q2. Nikhil clicks "Import to Vercel" before ever running <code class="k">git push</code>. What actually happens?</div>
+    <div class="opt" data-c="1"><span class="ab">A</span><span>Vercel builds an empty project successfully, since it doesn't need the code until later.</span></div>
+    <div class="opt" data-c="0"><span class="ab">B</span><span>There's nothing to import yet — Vercel can only see repositories that exist on GitHub, and a local commit that was never pushed isn't on GitHub at all.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>Vercel automatically finds the file directly from Nikhil's laptop over the local network.</span></div>
+    <div class="quizWhy">Correct answer: <b>B</b>. Vercel imports from GitHub, not from your machine — the push step is what actually puts the code somewhere Vercel can reach. Skip it and there's simply nothing to import.</div>
+  </div>
+
+  <div class="note beg"><b>Also true and worth saying out loud:</b> Lovable's Build 1 from Class 17 already had a live URL the moment Nikhil clicked Publish — no git, no GitHub account, no import step. That's the trade a browser-builder makes for you automatically. A hand-built file gets you full control and no monthly credit limit, at the cost of these extra steps, once, ever, per project.</div>
+</div></section>
+
+<div class="divider"></div>
+
+<!-- ============ SECTION 3: ENV VARS & SECRETS ============ -->
+<section class="blk" id="secrets"><div class="wrap">
+  <div class="secHead"><span class="secNum">§ 3</span><h2>Environment Variables &amp; API Key Security</h2><span class="secTime">⏱ 16 min</span></div>
+  <p class="secLede">The shelf-talker page had no secret to protect. The moment an app calls a paid LLM API, that stops being true — and this is where most real, avoidable damage in this whole course actually happens.</p>
+
+  <div class="analogy">
+    <div class="ic">🔑</div>
+    <div><div class="tt">The Analogy</div>
+    <p>An API key is a shop's spare key, not its address. The address — the code, the logic, what the app does — is fine to hand anyone, and on GitHub it's usually meant to be public. The spare key opens the till. Writing it directly into a file that gets pushed to a public GitHub repo is the digital version of taping the shop key to the front window with the address.</p></div>
+  </div>
+
+  <div class="defBox">
+    <span class="term">Environment Variable</span>
+    <p>A piece of configuration — like an API key — stored <b>outside the code itself</b>, in the hosting platform's own settings, and handed to the running app only at runtime. The code refers to it by name (<code class="k">process.env.GEMINI_API_KEY</code>, for example) and never contains the actual value. Push the code to a public repo all day — the key was never in it.</p>
+  </div>
+
+  <div class="realGrid">
+    <div class="realCard">
+      <div class="rtag">⚠ Documented, Not Hypothetical</div>
+      <h4>This is a well-tracked category of real incident</h4>
+      <p>GitHub's own secret-scanning system exists specifically because this keeps happening at scale: it checks every push, commit, file upload and API request against known secret patterns <b>before</b> the push even completes, covering roughly 70 different provider token formats. When a live key does slip through and land in a public repo, GitHub's partner program notifies the provider directly so the key can be revoked — often before anyone malicious finds it. None of that infrastructure would exist if hardcoded keys in public repos weren't a routine, recurring event.</p>
+    </div>
+    <div class="realCard">
+      <div class="rtag">The Near-Miss, Chapter One Shaped</div>
+      <h4>What it would look like here</h4>
+      <p>Imagine Nikhil pastes the Dify chatbot's Gemini API key straight into a <code class="k">config.js</code> file "just to get it working today," pushes the repo to GitHub as public (so Ravi can glance at the code later), and moves on. Nothing bad has to happen immediately — but the key is now sitting in the commit history of a public repo, discoverable by anyone, including automated scanners that exist purely to find exactly this.</p>
+    </div>
+  </div>
+
+  <div class="say">
+    <span class="who">🎙 Instructor Says</span>
+    <p>"The fix is not 'be more careful.' The fix is a rule that removes the temptation entirely: <b>a real secret never appears as literal text inside a file that gets committed to git — ever, not even once, not even temporarily.</b> It goes into the hosting platform's environment variable settings, or into a local <code class="k">.env</code> file that's explicitly excluded from git via <code class="k">.gitignore</code>. Both Vercel and Render have a dedicated Environment Variables screen for exactly this — that's not a bonus feature, it's the whole reason it exists."</p>
+  </div>
+
+  <!-- SIM 3 -->
+  <div class="sim" id="sim3">
+    <h3>SIM 3 · Spot the Hardcoded Secret</h3>
+    <p class="simSub">Three real files from a rushed first-draft repo. Click every line that actually leaks a live secret into the code. Watch for two traps: a line that only <em>looks</em> dangerous, and one that already does it right.</p>
+
+    <div class="codeTabs" id="s3tabs"></div>
+    <div class="codeFile" id="s3file"></div>
+    <button class="btn sm" id="s3reveal">Reveal All Answers</button>
+
+    <div class="scanScoreRow">
+      <span>Correctly flagged: <b id="s3hits">0</b></span>
+      <span>False positives (clicked a safe line): <b id="s3fp">0</b></span>
+      <span>Missed leaks: <b id="s3miss">0</b></span>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz3">
+    <div class="q">Q3. Nikhil argues: "the repo is private, only I can see it — surely a hardcoded key is fine there?" What's the actual problem with that reasoning?</div>
+    <div class="opt" data-c="0"><span class="ab">A</span><span>A "private" repo can be made public later by mistake, shared with a collaborator who screenshots it, or connected to a CI/deploy tool that logs its contents — the habit of never hardcoding a real key is what protects you from all of those, not the current visibility setting.</span></div>
+    <div class="opt" data-c="1"><span class="ab">B</span><span>Nothing — a genuinely private repo is a fully sufficient place to store a live API key permanently.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>Private repos technically can't contain any text files at all, so the question doesn't apply.</span></div>
+    <div class="quizWhy">Correct answer: <b>A</b>. "Private today" isn't a durable guarantee — visibility settings change, collaborators change, tools change. Environment variables are the fix precisely because they don't depend on remembering to keep something private forever.</div>
+  </div>
+</div></section>
+
+<div class="divider"></div>
+
+<!-- ============ SECTION 4: BUILD 2 — RENDER ============ -->
+<section class="blk" id="build2"><div class="wrap">
+  <div class="secHead"><span class="secNum">§ 4 · Build 2</span><h2>The Dify Chatbot → a Real Deploy on Render</h2><span class="secTime">⏱ 24 min</span></div>
+  <p class="secLede">The Dify chatbot you built earlier this course already reasons well. Today isn't about rebuilding it — it's about giving it a public address of its own, with the LLM key held safely the whole way through.</p>
+
+  <div class="note pro"><b>Instructor — a real pivot, and here's exactly why:</b> live research for this class turned up two things that change Build 2's shape from the original curriculum framing. <b>First:</b> Dify Cloud's own free Sandbox plan already hands you a shareable public link the moment you publish a chatbot there — no deploy needed at all, similar to what Lovable already did in §2's framing. <b>Second:</b> a full self-hosted Dify stack (its web app, API server, background worker, database and vector store, run together via Docker Compose) needs roughly <b>4GB of RAM and 2 CPU cores</b> to run properly by Dify's own setup guidance — and Render's free web service tier gives you <b>512MB RAM and 0.1 CPU</b>. That's not close. Today's Build 2 is deliberately built around hitting that wall live, in front of the class, because "here's exactly what a free-tier ceiling looks like when you slam into it" is a stronger lesson than a demo that quietly never tests the limit.</div>
+
+  <div class="say">
+    <span class="who">🎙 Instructor Says</span>
+    <p>"So why deploy Dify yourself at all, if Dify Cloud already gives you a free link? Two honest reasons, and say both: Dify Cloud's free Sandbox caps you at a couple hundred model calls before it wants you on a paid plan, and it's Dify's server, Dify's uptime, Dify's terms — not Chapter One's. Self-hosting is what you reach for the day either of those stops being fine. Today we walk the mechanics for real, on Render, and we're honest on-screen about exactly where the free tier stops being enough."</p>
+  </div>
+
+  <ol class="verifySteps">
+    <li><b>Start from the existing export.</b> Dify's self-hosted repository ships a ready-made <code class="k">docker-compose.yaml</code> that starts the whole stack — web, API, worker, Postgres, Redis, and a vector store — with one command. That file is the "code" being deployed; nothing about the chatbot's own configuration changes.</li>
+    <li><b>Push it to GitHub</b> the same way as Build 1 — <code class="k">git init</code>, <code class="k">git add .</code>, <code class="k">git commit</code>, create an empty repo on GitHub, then <code class="k">git remote add origin …</code> and <code class="k">git push</code>.</li>
+    <li><b>On Render, choose "Blueprint" instead of "Web Service.</b>" Render's Blueprints read a <code class="k">render.yaml</code> and provision multiple linked services (web, worker, database) from one repo in a single pass — this is the shape a multi-service app like Dify actually needs, not a single Web Service.</li>
+    <li><b>Set the environment variables before the first deploy.</b> In the service's <b>Environment</b> tab, click <b>+ Add Environment Variable</b> and add the LLM provider key — never typed into any file in the repo:
+      <div class="codeWrap"><button class="copyBtn" type="button">Copy</button><pre class="code"><span class="cm"># Render dashboard → Environment tab → + Add Environment Variable</span>
+<span class="kw">Key:</span>   OPENAI_API_KEY   <span class="cm">(or GOOGLE_API_KEY, whichever the chatbot actually calls)</span>
+<span class="kw">Value:</span> <span class="st">"the real key — pasted here, never into a file"</span></pre></div>
+      Choose <b>Save, rebuild, and deploy</b> so the new variable is actually picked up.
+    </li>
+    <li><b>Try it on the free instance type first — and watch it struggle or fail to boot.</b> This is the point, not a mistake to route around: the build log will show the containers competing for 512MB of RAM, and at least one service (usually the vector store or worker) will be OOM-killed or crash-loop.</li>
+    <li><b>Bump the web and worker services to Render's Standard instance type</b> (the smallest tier with enough RAM/CPU headroom for Dify's stack) under <b>Settings → Instance Type</b>. This step costs real money — say the number out loud in class, and confirm it against Render's current pricing page before teaching live, since instance pricing moves. On Standard, the same Blueprint boots cleanly and the chatbot answers from its own public URL within a couple of minutes.</li>
+    <li><b>Open the live URL</b> Render assigns to the web service, send the chatbot a real message, and confirm the response comes back — this is the exact same chatbot logic from earlier in the course, now reachable by anyone with the link, not just Nikhil's laptop.</li>
+  </ol>
+
+  <div class="note adv"><b>The honest bottom line for the room:</b> a lightweight static file (Build 1) is genuinely free forever. A real multi-service AI application (Build 2) is <em>reliably deployable</em> for free — Render's Blueprint mechanics, environment variables, and live URL all work at zero cost — but running something as resource-hungry as self-hosted Dify continuously needs a small paid instance. That's not a workaround or a trick; that's what "free tier" actually means once you're honest about what a real backend costs to keep warm.</div>
+
+  <!-- SIM 4 -->
+  <div class="sim" id="sim4">
+    <h3>SIM 4 · The Environment-Variable Vault</h3>
+    <p class="simSub">Five items are about to be pushed somewhere. For each one, decide: does it belong in Render's private Environment Variables panel, or is it fine sitting in the public GitHub repo? Get it wrong on a real secret and watch exactly what "leaked" looks like.</p>
+
+    <div class="secretPool" id="s4pool"></div>
+
+    <div class="vaultGrid">
+      <div class="vaultZone env"><div class="vzTitle">🔒 Render Environment Variables (private)</div><div id="s4env"></div></div>
+      <div class="vaultZone pub"><div class="vzTitle">📂 Pushed to Public GitHub Repo</div><div id="s4pub"></div></div>
+    </div>
+
+    <div class="verdict vaultReadout" id="s4verdict" style="display:none"></div>
+  </div>
+
+  <div class="quiz" id="quiz4">
+    <div class="q">Q4. Render's free web service instance type can't fit the full Dify stack, and Standard costs real money every month. Reema asks why Chapter One should pay anything at all when Dify Cloud is free. What's the fair answer?</div>
+    <div class="opt" data-c="0"><span class="ab">A</span><span>Because Dify Cloud's free Sandbox caps out on model calls and runs on someone else's terms — self-hosting is the option you reach for specifically when you outgrow that, and it costs money precisely because it's giving you dedicated resources Sandbox never promised.</span></div>
+    <div class="opt" data-c="1"><span class="ab">B</span><span>Because Render secretly disables the free tier for any AI-related workload, regardless of resource usage.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>There's no good reason — Chapter One should always prefer whichever option is free, with no other consideration.</span></div>
+    <div class="quizWhy">Correct answer: <b>A</b>. Free tiers aren't arbitrary — they're sized for light workloads. Self-hosted Dify is genuinely heavier than that, and paying a small amount for dedicated resources is a real, honest trade-off, not a platform being unfair.</div>
+  </div>
+</div></section>
+
+<div class="divider"></div>
+
+<!-- ============ SECTION 5: FREE-TIER LIMITS ============ -->
+<section class="blk" id="limits"><div class="wrap">
+  <div class="secHead"><span class="secNum">§ 5</span><h2>Free-Tier Limits — Where Each Ceiling Actually Is</h2><span class="secTime">⏱ 14 min</span></div>
+  <p class="secLede">"Free" isn't a flat, permanent yes. Every platform's free tier has a specific ceiling, and it behaves differently the moment you hit it — worth knowing before it happens to a real launch, not during one.</p>
+
+  <table class="tbl">
+    <tr><th>Platform</th><th>What the ceiling actually is</th><th>What happens when you hit it</th></tr>
+    <tr><td>Vercel Hobby</td><td>100GB bandwidth/month, 100K function invocations, 4 hours of Active CPU/month</td><td>Deployments pause and functions may stop responding; existing static pages usually stay reachable.</td></tr>
+    <tr><td>Render Free</td><td>750 instance-hours/month across free services; 15 minutes of inactivity triggers spin-down</td><td>The service sleeps. The next visitor's request cold-starts it — a 30–60 second wait before anything responds.</td></tr>
+    <tr><td>Railway</td><td>A one-time $5 trial credit, no renewing free allowance</td><td>The service is paused once the credit runs out, until a card is added and a paid plan kicks in.</td></tr>
+  </table>
+
+  <!-- SIM 5 -->
+  <div class="sim" id="sim5">
+    <h3>SIM 5 · Fill the Free-Tier Dial</h3>
+    <p class="simSub">Pick a platform, then send simulated traffic. Watch the dial climb toward its actual documented ceiling — and see exactly what that platform does the moment it's hit.</p>
+
+    <div class="dialTabs" id="s5tabs"></div>
+
+    <div class="dialWrap">
+      <div class="dialBar"><div class="dialFill" id="s5fill"></div></div>
+      <div class="dialLabel"><span id="s5statusLabel">0% of free-tier ceiling</span><b id="s5count">0 requests sent</b></div>
+    </div>
+
+    <button class="btn sm" id="s5send">📡 Send 1 Simulated Request</button>
+    <button class="btn sm ghost" id="s5reset">↺ Reset</button>
+
+    <div class="ceilingCard" id="s5ceiling"></div>
+  </div>
+
+  <div class="quiz" id="quiz5">
+    <div class="q">Q5. A visitor complains the shelf-talker link "took forever to load" the first time this morning, but was instant every time after. Which platform's known behaviour explains this exactly, and is it actually a bug?</div>
+    <div class="opt" data-c="1"><span class="ab">A</span><span>This describes Vercel serving a static file — and it's a genuine bug that needs fixing.</span></div>
+    <div class="opt" data-c="0"><span class="ab">B</span><span>This is Render's free-tier spin-down/cold-start behaviour on a backend service that had been idle for 15+ minutes — expected, documented, and not a bug at all.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>This only happens on Railway, and only after the trial credit is fully exhausted.</span></div>
+    <div class="quizWhy">Correct answer: <b>B</b>. A slow-then-instant pattern on an idle backend is the textbook signature of Render's free-tier spin-down — the first request wakes the service, every request after that hits it already warm.</div>
+  </div>
+</div></section>
+
+<div class="divider"></div>
+
+<!-- ============ SECTION 6: GOING LIVE FOR REAL ============ -->
+<section class="blk" id="live"><div class="wrap">
+  <div class="secHead"><span class="secNum">§ 6</span><h2>Going Live For Real — Webhooks, Domains &amp; Portfolio Value</h2><span class="secTime">⏱ 10 min</span></div>
+  <p class="secLede">A live URL isn't just something to send a friend. It's the one thing that lets other automated systems find your app without a human in the loop — and it's the difference on your own CV between a claim and a link.</p>
+
+  <div class="say">
+    <span class="who">🎙 Instructor Says — Closing Class 18's Thread</span>
+    <p>"Remember exactly where Class 18 left off, deliberately unanswered: <b>'What happens the week Nikhil's on holiday, and Saturday still needs a recap sent — with nobody there to ask?'</b> Here's the answer, and it only exists because of today. A Claude Project or a skill.md only does anything when a human opens a chat and asks. But the Dify chatbot now has a real, permanent public URL — which means an <b>n8n schedule trigger or a Zapier scheduled Zap can call it directly, every Saturday morning, with nobody there to click anything.</b> No laptop needs to be open. No human needs to remember. The recap gets generated and sent on its own, because the thing generating it finally has an address a webhook can find."</p>
+  </div>
+
+  <div class="defBox">
+    <span class="term">Connecting a Deployed App Back to n8n / Zapier</span>
+    <p>Once an app has a public URL, any workflow tool can treat it exactly like any other web service: an n8n <b>HTTP Request</b> node or a Zapier <b>Webhooks</b> action can call it on a schedule, pass it data, and read back the response — the same shape of connection you've already built to other APIs earlier in this course. The only new ingredient today added was the URL itself.</p>
+  </div>
+
+  <div class="note beg"><b>Portfolio value, said plainly:</b> a screenshot of a chatbot working on someone's laptop is a claim. A link that a stranger — a recruiter, a client, an interviewer — can click and use themselves, right now, with no explanation needed, is proof. Between two otherwise-identical CV lines, the one with a live URL attached is the one that gets clicked.</p></div>
+
+  <table class="tbl">
+    <tr><th>Thing</th><th>Screenshot</th><th>Live URL</th></tr>
+    <tr><td>Believability to a stranger</td><td>Takes your word for it</td><td>Verifies itself</td></tr>
+    <tr><td>Usable by someone else, unattended</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Can be called by a scheduled webhook</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Survives your laptop being closed</td><td>Depends where the image lives</td><td>Yes</td></tr>
+  </table>
+</div></section>
+
+<div class="divider"></div>
+
+<!-- ============ TAKE-HOME ============ -->
+<section class="blk" id="takehome"><div class="wrap">
+  <div class="secHead"><span class="secNum">TAKE-HOME</span><h2>Three Challenges</h2><span class="secTime">⏱ homework</span></div>
+  <p class="secLede">All three map straight onto the two builds you already ran today — nothing here asks for a capability that wasn't just taught.</p>
+
+  <div class="chalCard" id="chal1">
+    <div class="chalHead"><span class="cn">01</span><h4>Deploy your own single-file app to Vercel</h4><span class="chev">›</span></div>
+    <div class="chalBody">
+      <div class="cLabel">Mission</div>
+      <p class="mission">Take any single-file HTML app you've built in this course — or write a small new one in five minutes, a checklist or calculator is fine. Follow §2's <code class="k">.verifySteps</code> exactly: <code class="k">git init</code> → GitHub repo → Vercel import → Deploy. Send the live <code class="k">.vercel.app</code> link to one other person and confirm they can open it without you explaining anything.</p>
+    </div>
+  </div>
+  <div class="chalCard" id="chal2">
+    <div class="chalHead"><span class="cn">02</span><h4>Run the "spot the secret" audit on a real repo</h4><span class="chev">›</span></div>
+    <div class="chalBody">
+      <div class="cLabel">Mission</div>
+      <p class="mission">Open any code repo you've pushed to GitHub in this course — yours, or one from an earlier class exercise. Search it (GitHub's own search bar, or your editor's find-in-files) for anything that looks like a literal API key, password, or token sitting in plain text. If you find one, move it into an environment variable and confirm the app still works. If you find none, write down which file you checked and why you're confident.</p>
+    </div>
+  </div>
+  <div class="chalCard" id="chal3">
+    <div class="chalHead"><span class="cn">03</span><h4>Wire a scheduled webhook to a live URL</h4><span class="chev">›</span></div>
+    <div class="chalBody">
+      <div class="cLabel">Mission</div>
+      <p class="mission">Using either your Vercel deploy from Challenge 1 or any app you've deployed with a real public URL, build an n8n Schedule Trigger (or a Zapier scheduled Zap) that calls it once a day and logs the response somewhere — a Google Sheet, a Slack message, anywhere you can see it landed. This is §6's "no human required" thread, built with your own hands.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ WRAP-UP ============ -->
+<section class="blk" id="wrap"><div class="wrap">
+  <div class="secHead"><span class="secNum">WRAP-UP</span><h2>Deployed, Secured, Reachable</h2><span class="secTime">⏱ 6 min</span></div>
+
+  <div class="card">
+    <h3>A Day in Nikhil's Life — before and after today</h3>
+    <div class="prepRow"><b>9:00 AM</b><span>Before: opens his laptop specifically to show someone the shelf-talker page. After: sends a link, keeps working the counter.</span></div>
+    <div class="prepRow"><b>11:30 AM</b><span>Before: pastes the Gemini key straight into a config file "just for now." After: it goes into Render's Environment tab, never touches a committed file.</span></div>
+    <div class="prepRow"><b>2:00 PM</b><span>Before: the Dify chatbot exists only as a screenshot in a WhatsApp message to Sarita. After: Sarita opens the actual live URL herself, on her own phone.</span></div>
+    <div class="prepRow"><b>Saturday, no Nikhil</b><span>Before: no recap goes out, because nobody's there to trigger it. After: an n8n schedule hits the deployed chatbot's public URL on its own — the recap goes out with zero humans involved.</span></div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Thing you can now bill for</th><th>Where it came from today</th></tr>
+    <tr><td>Choosing between Vercel, Render, and Railway with an actual reason, not a guess</td><td>§1</td></tr>
+    <tr><td>Taking a finished static app from a laptop to a live public URL, for free, forever</td><td>§2</td></tr>
+    <tr><td>Never hardcoding a secret — using environment variables as the default, not the exception</td><td>§3</td></tr>
+    <tr><td>Deploying a real multi-service backend and reading a free-tier ceiling honestly</td><td>§4</td></tr>
+    <tr><td>Knowing exactly what happens — and why — when a free tier gets hit</td><td>§5</td></tr>
+    <tr><td>Connecting a deployed app to a scheduled webhook so nothing needs a human to fire it</td><td>§6</td></tr>
+  </table>
+
+  <div class="card">
+    <h3>Key Takeaways</h3>
+    <p>1. <b>A demo on your laptop and a shipped product are different claims.</b> The gap between them is a public URL, not more code.</p>
+    <p>2. <b>Vercel, Render, and Railway are not interchangeable "free hosting."</b> Static vs. backend, spin-down vs. always-on, renewing free tier vs. one-time trial credit — pick based on the actual job.</p>
+    <p>3. <b>A secret never appears as literal text in a committed file — ever.</b> Environment variables exist specifically so "be careful" is never the only thing standing between you and a leak.</p>
+    <p>4. <b>A free tier's ceiling is a specific, documented number, not a vibe.</b> Knowing what happens at that ceiling — pause, cold-start, or exhausted credit — beats finding out live.</p>
+    <p>5. <b>A public URL is what lets automation find your app without you.</b> That's the whole mechanism behind a webhook triggering something on a schedule, with nobody there to click anything.</p>
+  </div>
+
+  <p class="bigQuote">Nikhil's shelf-talker page and the Dify chatbot are both live now — reachable by anyone, keys held safely off to the side, and finally able to answer a schedule trigger with no one watching. <em>But today's whole config still assumes Nikhil is the only person who ever needs to change any of it.</em></p>
+
+  <div class="say">
+    <span class="who">🎙 Instructor Says — Closing</span>
+    <p>"Leave with this one, unanswered on purpose: today, every environment variable, every Vercel project, every Render Blueprint lives under Nikhil's own account. That's fine while it's one person building everything. But <b>what happens the day Tara or one of the weekend staff needs to update the chatbot's key, or Sarita wants to see the Render dashboard herself, and none of them has Nikhil's login?</b> Access, permissions, and who actually owns a deployed thing once more than one person depends on it — that's not today's problem. That's next time's."</p>
+  </div>
+</div></section>
+
+<footer class="footer"><div class="wrap">
+  <p><b>Class 21 · Deploying AI Apps — Platforms, Hosting &amp; Going Live</b> — 5 simulators · 5 checkpoint quizzes</p>
+  <p style="margin-top:6px">— Scaler AIML · verified September 2026 · re-verify before teaching · Railway's standing free tier and Dify Cloud's free public URL were both confirmed via live research and reflected honestly above</p>
+</div></footer>
+
+<script>
+// ---------- progress bar ----------
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// ---------- hero counters ----------
+document.querySelectorAll('.hstat .n').forEach(function(el){
+  var target = parseInt(el.getAttribute('data-count'), 10);
+  var cur = 0;
+  var step = Math.max(1, Math.round(target / 20));
+  var t = setInterval(function(){
+    cur += step;
+    if(cur >= target){ cur = target; clearInterval(t); }
+    el.textContent = cur;
+  }, 40);
+});
+
+// ---------- copy-to-clipboard for code blocks ----------
+document.querySelectorAll('.copyBtn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var code = btn.nextElementSibling.innerText;
+    var flash = function(label){
+      var orig = 'Copy';
+      btn.textContent = label;
+      btn.classList.toggle('copied', label === 'Copied!');
+      setTimeout(function(){
+        btn.textContent = orig;
+        btn.classList.remove('copied');
+      }, 1500);
+    };
+    var fallbackCopy = function(){
+      var ta = document.createElement('textarea');
+      ta.value = code;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try{ ok = document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(ta);
+      flash(ok ? 'Copied!' : 'Copy failed');
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(function(){
+        flash('Copied!');
+      }).catch(fallbackCopy);
+    } else {
+      fallbackCopy();
+    }
+  });
+});
+
+// ---------- chalCard accordion ----------
+document.querySelectorAll('.chalHead').forEach(function(h){
+  h.addEventListener('click', function(){
+    h.parentElement.classList.toggle('open');
+  });
+});
+
+// ---------- generic quiz handler ----------
+document.querySelectorAll('.quiz').forEach(function(quiz){
+  var opts = quiz.querySelectorAll('.opt');
+  var why = quiz.querySelector('.quizWhy');
+  opts.forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(quiz.classList.contains('answered')) return;
+      quiz.classList.add('answered');
+      var correctIdx = null;
+      opts.forEach(function(o, i){ if(o.getAttribute('data-c') === '0') correctIdx = i; });
+      opts.forEach(function(o){
+        o.classList.add('locked');
+        if(o.getAttribute('data-c') === '0') o.classList.add('correct');
+        else if(o === opt) o.classList.add('wrong');
+      });
+      why.classList.add('show');
+    });
+  });
+});
+
+// ---------- SIM 1: Match the Job to the Platform ----------
+(function(){
+  var scenarios = [
+    { id:'sc1', tag:'Traffic: spiky · Cold-start tolerance: none · Budget: ₹0', txt:'A single static HTML page. Sarita is about to post the link on Instagram — a short spike, then near-zero visits. No backend, no database.', best:'vercel', notes:{
+        vercel:'Right fit. A static file has nothing to spin down — Vercel serves spikes instantly, free, forever.',
+        render:'Works, but pointlessly heavier — you’re paying the mental overhead of a backend platform for a file that never needed one.',
+        railway:'Massive overkill, and it starts burning a one-time trial credit for a job that costs nothing on Vercel.'
+      }},
+    { id:'sc2', tag:'Traffic: business hours only · Cold-start tolerance: none · Budget: ~₹600/mo', txt:'The Dify chatbot needs to answer instantly, every time, all day during shop hours — a 45-second cold-start wait on the first message of the morning is not acceptable.', best:'render-paid', notes:{
+        vercel:'Doesn’t fit at all — Vercel’s Hobby tier can’t run Dify’s multi-service backend.',
+        render:'Close, but the free instance spins down after 15 minutes idle — exactly the cold-start this scenario can’t tolerate. Needs the paid Standard tier, which the budget allows.',
+        railway:'Technically possible, but the trial credit alone won’t cover always-on hours for a full month — you’d be back to a real bill fast anyway.'
+      }},
+    { id:'sc3', tag:'Traffic: light, 2-week pilot · Cold-start tolerance: high · Budget: card OK eventually', txt:'A short two-week pilot test with a handful of users, before deciding whether to keep the tool at all. Adding a card later is fine if it goes well.', best:'railway', notes:{
+        vercel:'Works for a static piece, but this scenario implies a real backend under test — doesn’t fit Vercel’s Hobby tier.',
+        render:'A reasonable free-tier fit too — but Render’s spin-down could annoy testers checking in sporadically over two weeks.',
+        railway:'A one-time trial credit is a genuinely good match for a short, bounded pilot — it’s built for exactly this "try it, decide later" window.'
+      }},
+    { id:'sc4', tag:'Traffic: continuous, resource-heavy · Cold-start tolerance: none · Budget: small but nonzero', txt:'A resource-heavy self-hosted app (like the full Dify stack) that needs to run continuously with predictable performance.', best:'render-paid', notes:{
+        vercel:'Vercel’s serverless model can’t run a persistent, resource-heavy multi-container stack at all.',
+        render:'Render’s free tier’s 512MB/0.1 CPU can’t fit this stack either — but Render’s paid Standard instance type is built for exactly this.',
+        railway:'Possible, but the trial-credit model makes ongoing, predictable cost harder to reason about than Render’s flat monthly instance pricing.'
+      }},
+    { id:'sc5', tag:'Traffic: one link, one afternoon, never again · Cold-start tolerance: total · Budget: ₹0', txt:'An experimental prototype that just needs a link to text a friend for feedback, built in an afternoon, likely never touched again.', best:'vercel', notes:{
+        vercel:'Right fit — zero setup cost, zero ongoing cost, and a link that works instantly for a one-off share.',
+        render:'Would also work for free, but a cold-start delay on a throwaway one-off link is friction this scenario doesn’t need to accept.',
+        railway:'Spending any of a limited trial credit on something meant to be thrown away is the wrong trade.'
+      }}
+  ];
+  var wrap = document.getElementById('s1scenarios');
+  var good = 0, bad = 0, done = 0;
+  var platformLabels = { vercel:'Vercel', render:'Render (free)', 'render-paid':'Render (paid)', railway:'Railway' };
+
+  scenarios.forEach(function(s){
+    var card = document.createElement('div');
+    card.className = 'scenCard';
+    card.id = 's1_' + s.id;
+    var btnRow = document.createElement('div');
+    btnRow.className = 'scenBtnRow';
+    ['vercel','render-paid','railway'].forEach(function(p){
+      var b = document.createElement('button');
+      b.className = 'scenBtn';
+      b.textContent = platformLabels[p];
+      b.addEventListener('click', function(){
+        if(card.classList.contains('done')) return;
+        var ok = p === s.best;
+        if(ok) good++; else bad++;
+        done++;
+        btnRow.querySelectorAll('.scenBtn').forEach(function(x){ x.disabled = true; });
+        b.classList.add('chosen', ok ? 'good' : 'bad');
+        var v = card.querySelector('.scenVerdict');
+        v.innerHTML = '<b style="color:' + (ok ? 'var(--green)' : 'var(--rose)') + '">' + (ok ? 'Good fit.' : 'Mismatch.') + '</b> ' + (s.notes[p] || '');
+        card.classList.add('done');
+        document.getElementById('s1good').textContent = good;
+        document.getElementById('s1bad').textContent = bad;
+        document.getElementById('s1done').textContent = done;
+      });
+      btnRow.appendChild(b);
+    });
+    card.innerHTML = '<div class="scenTag">' + s.tag + '</div><div class="scenTxt">' + s.txt + '</div>';
+    card.appendChild(btnRow);
+    var vdiv = document.createElement('div');
+    vdiv.className = 'scenVerdict';
+    card.appendChild(vdiv);
+    wrap.appendChild(card);
+  });
+})();
+
+// ---------- SIM 2: Deploy Pipeline Race ----------
+(function(){
+  var stages = [
+    { id:'init', label:'1. git init', requires:[] },
+    { id:'commit', label:'2. git add + commit', requires:['init'] },
+    { id:'ghrepo', label:'3. create GitHub repo', requires:[] },
+    { id:'push', label:'4. git push', requires:['init','commit','ghrepo'] },
+    { id:'import', label:'5. import to Vercel', requires:['push'] },
+    { id:'deploy', label:'6. Vercel deploys', requires:['import'] }
+  ];
+  var done = {};
+  var row = document.getElementById('s2stages');
+  var log = document.getElementById('s2log');
+  var urlBox = document.getElementById('s2url');
+
+  function addLog(text, cls){
+    var span = document.createElement('span');
+    span.className = 'lg ' + cls;
+    span.textContent = text;
+    log.appendChild(span);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function render(){
+    row.innerHTML = '';
+    stages.forEach(function(s){
+      var b = document.createElement('button');
+      b.className = 'stageBtn' + (done[s.id] ? ' done' : '');
+      b.textContent = s.label;
+      b.addEventListener('click', function(){ attempt(s); });
+      row.appendChild(b);
+    });
+  }
+
+  function attempt(s){
+    if(done[s.id]){
+      addLog('[' + s.label + '] already completed — nothing to do.', 'dim');
+      return;
+    }
+    var missing = s.requires.filter(function(r){ return !done[r]; });
+    if(missing.length){
+      var missLabels = missing.map(function(m){ return stages.filter(function(x){ return x.id === m; })[0].label; });
+      addLog('[FAIL] ' + s.label + ' — cannot run yet. Missing: ' + missLabels.join(', ') + '.', 'err');
+      return;
+    }
+    done[s.id] = true;
+    addLog('[OK] ' + s.label + ' completed.', 'ok');
+    render();
+    if(s.id === 'deploy'){
+      addLog('Build finished in 18s. Deployment live.', 'ok');
+      urlBox.textContent = '✅ https://shelf-talker-nikhil.vercel.app is now live.';
+      urlBox.classList.add('show');
+    }
+  }
+
+  document.getElementById('s2reset').addEventListener('click', function(){
+    done = {};
+    log.innerHTML = '';
+    urlBox.classList.remove('show');
+    urlBox.textContent = '';
+    render();
+  });
+
+  render();
+})();
+
+// ---------- SIM 3: Spot the Hardcoded Secret ----------
+(function(){
+  var files = {
+    'config.js': [
+      { t:'export const APP_NAME = "Chapter One Chatbot";', leak:false },
+      { t:'export const GEMINI_API_KEY = "AIzaSyD-9f8k2n4Lp7qRtVxYzAbCdEfGhIjKlM";', leak:true },
+      { t:'export const MAX_HISTORY_TURNS = 12;', leak:false },
+      { t:'export const SUPPORT_EMAIL = "hello@chapterone.shop";', leak:false }
+    ],
+    'render.yaml': [
+      { t:'services:', leak:false },
+      { t:'  - type: web', leak:false },
+      { t:'    envVars:', leak:false },
+      { t:'      - key: GEMINI_API_KEY', leak:false },
+      { t:'        value: AIzaSyD-9f8k2n4Lp7qRtVxYzAbCdEfGhIjKlM', leak:true },
+      { t:'      - key: NODE_ENV', leak:false },
+      { t:'        value: production', leak:false }
+    ],
+    'README.md': [
+      { t:'# Chapter One Chatbot', leak:false },
+      { t:'Deployed via Render Blueprint. See DEPLOY.md for steps.', leak:false },
+      { t:'// example only — not a real key: GEMINI_API_KEY=sk-example-DO-NOT-USE', leak:false },
+      { t:'The real key is read from process.env.GEMINI_API_KEY at runtime.', leak:false }
+    ]
+  };
+  var current = 'config.js';
+  var flagged = {};
+  var revealed = false;
+  var tabsEl = document.getElementById('s3tabs');
+  var fileEl = document.getElementById('s3file');
+
+  Object.keys(files).forEach(function(name){ flagged[name] = {}; });
+
+  function tabName(name){ return name; }
+
+  function renderTabs(){
+    tabsEl.innerHTML = '';
+    Object.keys(files).forEach(function(name){
+      var b = document.createElement('button');
+      b.className = 'codeTab' + (name === current ? ' on' : '');
+      b.textContent = name;
+      b.addEventListener('click', function(){ current = name; renderTabs(); renderFile(); });
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function renderFile(){
+    fileEl.innerHTML = '';
+    files[current].forEach(function(line, i){
+      var div = document.createElement('div');
+      div.className = 'codeLn';
+      var isFlagged = !!flagged[current][i];
+      if(revealed){
+        if(line.leak && isFlagged) div.className += ' hit';
+        else if(line.leak && !isFlagged) div.className += ' miss';
+        else if(!line.leak && isFlagged) div.className += ' falsepos';
+      } else if(isFlagged){
+        div.className += ' flagged';
+      }
+      div.innerHTML = '<span class="lnNo">' + (i+1) + '</span><span class="lnTxt"></span>';
+      div.querySelector('.lnTxt').textContent = line.t;
+      div.addEventListener('click', function(){
+        if(revealed) return;
+        flagged[current][i] = !flagged[current][i];
+        renderFile();
+      });
+      fileEl.appendChild(div);
+    });
+  }
+
+  document.getElementById('s3reveal').addEventListener('click', function(){
+    revealed = true;
+    var hits = 0, fp = 0, miss = 0;
+    Object.keys(files).forEach(function(name){
+      files[name].forEach(function(line, i){
+        var f = !!flagged[name][i];
+        if(line.leak && f) hits++;
+        else if(line.leak && !f) miss++;
+        else if(!line.leak && f) fp++;
+      });
+    });
+    document.getElementById('s3hits').textContent = hits;
+    document.getElementById('s3fp').textContent = fp;
+    document.getElementById('s3miss').textContent = miss;
+    renderFile();
+    this.disabled = true;
+  });
+
+  renderTabs();
+  renderFile();
+})();
+
+// ---------- SIM 4: Environment-Variable Vault ----------
+(function(){
+  var items = [
+    { id:'i1', name:'Gemini API key (live, used by the deployed chatbot)', envSafe:true },
+    { id:'i2', name:'App display name: "Chapter One Chatbot"', envSafe:false, harmless:true },
+    { id:'i3', name:'Render Postgres connection string (includes a password)', envSafe:true },
+    { id:'i4', name:'Public support email address', envSafe:false, harmless:true },
+    { id:'i5', name:'Dify admin dashboard password', envSafe:true }
+  ];
+  var placed = {};
+  var pool = document.getElementById('s4pool');
+  var envZone = document.getElementById('s4env');
+  var pubZone = document.getElementById('s4pub');
+  var verdict = document.getElementById('s4verdict');
+  var placedCount = 0;
+
+  items.forEach(function(it){
+    var card = document.createElement('div');
+    card.className = 'secretCard';
+    card.id = 's4_' + it.id;
+    var btns = document.createElement('div');
+    btns.className = 'scBtns';
+    ['env','pub'].forEach(function(zone){
+      var b = document.createElement('button');
+      b.className = 'btn sm ghost';
+      b.textContent = zone === 'env' ? '→ Env Var' : '→ Public Repo';
+      b.addEventListener('click', function(){
+        if(placed[it.id]) return;
+        placed[it.id] = zone;
+        placedCount++;
+        card.classList.add('placed');
+        btns.querySelectorAll('button').forEach(function(x){ x.disabled = true; });
+        var isLeak = it.envSafe && zone === 'pub';
+        var chip = document.createElement('div');
+        chip.className = 'vzItem ' + (isLeak ? 'leak' : 'safe');
+        chip.textContent = it.name + (isLeak ? ' — LEAKED ❗' : ' — OK');
+        (zone === 'env' ? envZone : pubZone).appendChild(chip);
+        if(placedCount === items.length){
+          var leaks = items.filter(function(x){ return x.envSafe && placed[x.id] === 'pub'; }).length;
+          verdict.style.display = 'block';
+          if(leaks > 0){
+            verdict.className = 'verdict bad';
+            verdict.innerHTML = '<b>' + leaks + ' real secret' + (leaks === 1 ? '' : 's') + ' landed in the public repo.</b> That’s exactly the near-miss GitHub’s secret scanning exists to catch — anything marked "LEAKED" above would already be discoverable the moment that repo went public.';
+          } else {
+            verdict.className = 'verdict good';
+            verdict.innerHTML = '<b>Clean.</b> Every real secret went into Render’s private Environment Variables panel; only genuinely harmless config ended up in the public repo. This is exactly the habit today’s Build 2 depends on.';
+          }
+        }
+      });
+      btns.appendChild(b);
+    });
+    card.innerHTML = '<div class="scName">' + it.name + '</div>';
+    card.appendChild(btns);
+    pool.appendChild(card);
+  });
+})();
+
+// ---------- SIM 5: Fill the Free-Tier Dial ----------
+(function(){
+  var platforms = {
+    vercel: { label:'Vercel Hobby', unit:'function invocations', ceiling:100000, per:2500, ceilingMsg:'At 100,000 invocations, Vercel pauses further deploys and functions may stop responding — static pages usually stay live.' },
+    render: { label:'Render Free', unit:'instance-hours this month', ceiling:750, per:18, ceilingMsg:'At 750 free instance-hours used up, the service can no longer stay warm on the free tier — it spins down and cold-starts on every visit until the month resets or you upgrade.' },
+    railway: { label:'Railway Trial', unit:'trial credit spent (of $5)', ceiling:500, per:22, ceilingMsg:'Once the one-time $5 trial credit is fully spent, the service is paused until a card is added and a paid plan begins — there’s no renewing free allowance behind it.' }
+  };
+  var current = 'vercel';
+  var used = { vercel:0, render:0, railway:0 };
+  var tabsEl = document.getElementById('s5tabs');
+  var fill = document.getElementById('s5fill');
+  var statusLabel = document.getElementById('s5statusLabel');
+  var countLabel = document.getElementById('s5count');
+  var ceilingCard = document.getElementById('s5ceiling');
+  var reqCount = { vercel:0, render:0, railway:0 };
+
+  function renderTabs(){
+    tabsEl.innerHTML = '';
+    Object.keys(platforms).forEach(function(k){
+      var b = document.createElement('button');
+      b.className = 'dialTab' + (k === current ? ' on' : '');
+      b.textContent = platforms[k].label;
+      b.addEventListener('click', function(){ current = k; renderTabs(); renderDial(); });
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function renderDial(){
+    var p = platforms[current];
+    var pct = Math.min(100, Math.round(used[current] / p.ceiling * 100));
+    fill.style.width = pct + '%';
+    fill.className = 'dialFill' + (pct >= 100 ? ' ceiling' : '');
+    statusLabel.textContent = pct + '% of ' + p.label + '’s free ceiling (' + p.unit + ')';
+    countLabel.textContent = reqCount[current] + ' requests sent';
+    if(pct >= 100){
+      ceilingCard.classList.add('show');
+      ceilingCard.innerHTML = '<b>Ceiling hit.</b> ' + p.ceilingMsg;
+    } else {
+      ceilingCard.classList.remove('show');
+      ceilingCard.innerHTML = '';
+    }
+  }
+
+  document.getElementById('s5send').addEventListener('click', function(){
+    var p = platforms[current];
+    used[current] = Math.min(p.ceiling, used[current] + p.per);
+    reqCount[current]++;
+    renderDial();
+  });
+
+  document.getElementById('s5reset').addEventListener('click', function(){
+    used[current] = 0;
+    reqCount[current] = 0;
+    renderDial();
+  });
+
+  renderTabs();
+  renderDial();
+})();
+</script>
+</body>
+</html>
