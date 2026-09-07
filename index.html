@@ -357,7 +357,7 @@ pre.code .kw{color:var(--orange2)}
     <h3>Today's Flight Plan · ~115 Minutes</h3>
     <div class="agRow"><span class="t">00:00–00:06</span><span class="name">The Laptop Problem — a cold open</span><span class="tag">SETUP</span></div>
     <div class="agRow"><span class="t">00:06–00:18</span><span class="name">Pick a Platform — Vercel vs. Render vs. Railway</span><span class="tag simtag">SIM + QUIZ</span></div>
-    <div class="agRow"><span class="t">00:18–00:38</span><span class="name">Build 1 — shelf-talker.html → GitHub → Vercel, live URL</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
+    <div class="agRow"><span class="t">00:18–00:42</span><span class="name">Build 1 — confirm Git/GitHub ready, then shelf-talker.html → GitHub → Vercel, live URL</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
     <div class="agRow"><span class="t">00:38–00:46</span><span class="name">☕ Stretch break</span><span class="tag">BREAK</span></div>
     <div class="agRow"><span class="t">00:46–01:02</span><span class="name">Environment Variables &amp; API Key Security</span><span class="tag simtag">SIM + QUIZ</span></div>
     <div class="agRow"><span class="t">01:02–01:26</span><span class="name">Build 2 — vibe-code Restock Radar → deployed in parallel on Render AND Railway</span><span class="tag simtag">BUILD + SIM + QUIZ</span></div>
@@ -451,13 +451,24 @@ pre.code .kw{color:var(--orange2)}
 
 <!-- ============ SECTION 2: BUILD 1 — VERCEL ============ -->
 <section class="blk" id="build1"><div class="wrap">
-  <div class="secHead"><span class="secNum">§ 2 · Build 1</span><h2>shelf-talker.html → GitHub → Vercel, Live in Minutes</h2><span class="secTime">⏱ 20 min</span></div>
+  <div class="secHead"><span class="secNum">§ 2 · Build 1</span><h2>shelf-talker.html → GitHub → Vercel, Live in Minutes</h2><span class="secTime">⏱ 24 min</span></div>
   <p class="secLede">No new code today. The exact same file from Class 17, pushed to a place Vercel can see it, and given a public address.</p>
 
   <div class="defBox">
     <span class="term">Why a single HTML file is the easiest possible deploy target</span>
     <p>There's no build step, no dependencies to install, no server code to run — the whole "application" is one file a browser can already open. Deploying it is really just: put the file somewhere Vercel can fetch it, and let Vercel serve it to anyone who asks. That's the entire job. Nothing about deployment is conceptually different for a complex app — it just has more moving parts to wire up.</p>
   </div>
+
+  <div class="card">
+    <h3>Before You Push — Confirm Git &amp; GitHub Are Ready</h3>
+    <p>Everything from here on assumes two things already exist on every laptop in the room: <b>Git installed locally</b>, and a <b>free GitHub account</b>. Neither has come up yet in this course — Class 17's shelf-talker file only ever needed VS Code, never a repository. Run this check once, right now, before touching the steps below — it covers both builds today, not just this one.</p>
+    <div class="prepRow"><b>Check 1 · Git installed?</b><span>Open a terminal and run <code class="k">git --version</code>. A version number back means it's already there — skip straight to Step 1 below.</span></div>
+    <div class="prepRow"><b>Missing, on Mac</b><span>Run <code class="k">git --version</code> anyway first — macOS often offers to install Apple's Command Line Tools right there, which includes Git. If it doesn't prompt, install directly from <code class="k">git-scm.com/download/mac</code>.</span></div>
+    <div class="prepRow"><b>Missing, on Windows</b><span>Download the installer from <code class="k">git-scm.com/download/win</code> and accept the defaults on every screen — that's the standard setup, nothing to customize.</span></div>
+    <div class="prepRow"><b>Check 2 · GitHub account?</b><span>If you don't already have one, sign up free at <code class="k">github.com/join</code> — just an email and a password, about two minutes, no card required.</span></div>
+  </div>
+
+  <div class="note beg"><b>Say this out loud before starting:</b> if either check comes back missing, fix it now, before Step 1 — every remaining step in today's class, in both builds, assumes a working <code class="k">git</code> command and a logged-in GitHub account. Five minutes spent here saves everyone getting stuck mid-push later.</div>
 
   <div class="say do">
     <span class="who">🛠 Instructor Does — live, on screen</span>
@@ -485,7 +496,7 @@ pre.code .kw{color:var(--orange2)}
     <li><b>Optional, one line:</b> under <b>Project Settings → Domains</b>, Vercel lets you attach a real custom domain (like <code class="k">shelf.chapterone.shop</code>) on the free Hobby plan at no extra cost — you'd only pay for buying the domain name itself, not for Vercel to serve it.</li>
   </ol>
 
-  <div class="note pro"><b>Instructor — verify before you teach this live:</b> re-check the exact Vercel dashboard button labels ("Add New…" → "Project," the Import Git Repository screen) against <a href="https://vercel.com/docs/git" target="_blank" rel="noopener">vercel.com/docs/git</a> the night before — dashboard copy shifts between releases more than the underlying mechanics do.</div>
+  <div class="note pro"><b>Instructor — verify before you teach this live:</b> re-check the exact Vercel dashboard button labels ("Add New…" → "Project," the Import Git Repository screen) against <a href="https://vercel.com/docs/git" target="_blank" rel="noopener">vercel.com/docs/git</a> the night before — dashboard copy shifts between releases more than the underlying mechanics do. Also send the Git/GitHub check above to the batch a day ahead of class if possible — a slow installer or a forgotten GitHub password eats real class time if it's discovered live instead.</div>
 
   <!-- SIM 2 -->
   <div class="sim" id="sim2">
@@ -594,7 +605,7 @@ pre.code .kw{color:var(--orange2)}
   </div>
 
   <ol class="verifySteps">
-    <li><b>Push the app to GitHub</b> — the identical three commands from Build 1, run inside the new folder:
+    <li><b>Push the app to GitHub</b> — the same Git and GitHub account confirmed ready in §2, the identical three commands from Build 1, just run inside the new folder:
       <div class="codeWrap"><button class="copyBtn" type="button">Copy</button><pre class="code"><span class="cm"># Terminal — run inside the restock-radar folder</span>
 <span class="fn">git</span> init
 <span class="fn">git</span> add .
