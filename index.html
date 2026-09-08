@@ -440,10 +440,11 @@ pre.code .kw{color:var(--orange2)}
 
   <div class="quiz" id="quiz1">
     <div class="q">Q1. Sarita wants to post the shelf-talker link on Chapter One's Instagram story, expecting a short traffic spike, then near-zero visits after. Zero budget. Which platform actually fits, and why?</div>
-    <div class="opt" data-c="0"><span class="ab">A</span><span>Vercel — it's a static file with no backend, the free tier handles spiky traffic on a display-only page for nothing, and there's no cold-start penalty because there's no server to spin down.</span></div>
-    <div class="opt" data-c="1"><span class="ab">B</span><span>Render's free tier — since it can run backends, it's automatically the safer choice for a traffic spike.</span></div>
-    <div class="opt" data-c="2"><span class="ab">C</span><span>Railway — the trial credit is generous enough that budget was never actually a real constraint here.</span></div>
-    <div class="quizWhy">Correct answer: <b>A</b>. A static file has nothing to "spin down" — Vercel serves it instantly at any traffic level within the free tier's generous limits, for a workload that never needed a real backend in the first place.</div>
+    <div class="opt" data-c="1"><span class="ab">A</span><span>Railway — the trial credit is generous enough that a zero budget was never really a constraint here.</span></div>
+    <div class="opt" data-c="2"><span class="ab">B</span><span>Render's free tier — it can run backends, so it must be the safer choice under a traffic spike.</span></div>
+    <div class="opt" data-c="0"><span class="ab">C</span><span>Vercel — a static file needs no backend, spiky traffic costs nothing, and no server means no cold start.</span></div>
+    <div class="opt" data-c="3"><span class="ab">D</span><span>Whichever platform Sarita's phone already has an app for — for a static file, only the viewing device matters.</span></div>
+    <div class="quizWhy">Correct answer: <b>C</b>. A static file has nothing to "spin down" — Vercel serves it instantly at any traffic level within the free tier's generous limits, for a workload that never needed a real backend in the first place.</div>
   </div>
 </div></section>
 
@@ -512,10 +513,11 @@ pre.code .kw{color:var(--orange2)}
 
   <div class="quiz" id="quiz2">
     <div class="q">Q2. Nikhil clicks "Import to Vercel" before ever running <code class="k">git push</code>. What actually happens?</div>
-    <div class="opt" data-c="1"><span class="ab">A</span><span>Vercel builds an empty project successfully, since it doesn't need the code until later.</span></div>
-    <div class="opt" data-c="0"><span class="ab">B</span><span>There's nothing to import yet — Vercel can only see repositories that exist on GitHub, and a local commit that was never pushed isn't on GitHub at all.</span></div>
-    <div class="opt" data-c="2"><span class="ab">C</span><span>Vercel automatically finds the file directly from Nikhil's laptop over the local network.</span></div>
-    <div class="quizWhy">Correct answer: <b>B</b>. Vercel imports from GitHub, not from your machine — the push step is what actually puts the code somewhere Vercel can reach. Skip it and there's simply nothing to import.</div>
+    <div class="opt" data-c="0"><span class="ab">A</span><span>Nothing to import — Vercel only sees repositories on GitHub, and an unpushed local commit never reached GitHub.</span></div>
+    <div class="opt" data-c="1"><span class="ab">B</span><span>Vercel builds an empty project successfully, because it fetches the actual code later during the first real deploy.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>Vercel finds the file directly on Nikhil's laptop over the local network, so the push step is optional.</span></div>
+    <div class="opt" data-c="3"><span class="ab">D</span><span>The import silently succeeds using a cached copy of Nikhil's last deployment, which is unrelated to this repo.</span></div>
+    <div class="quizWhy">Correct answer: <b>A</b>. Vercel imports from GitHub, not from your machine — the push step is what actually puts the code somewhere Vercel can reach. Skip it and there's simply nothing to import.</div>
   </div>
 
   <div class="note beg"><b>Also true and worth saying out loud:</b> Lovable's Build 1 from Class 17 already had a live URL the moment Nikhil clicked Publish — no git, no GitHub account, no import step. That's the trade a browser-builder makes for you automatically. A hand-built file gets you full control and no monthly credit limit, at the cost of these extra steps, once, ever, per project.</div>
@@ -575,10 +577,11 @@ pre.code .kw{color:var(--orange2)}
 
   <div class="quiz" id="quiz3">
     <div class="q">Q3. Nikhil argues: "the repo is private, only I can see it — surely a hardcoded key is fine there?" What's the actual problem with that reasoning?</div>
-    <div class="opt" data-c="0"><span class="ab">A</span><span>A "private" repo can be made public later by mistake, shared with a collaborator who screenshots it, or connected to a CI/deploy tool that logs its contents — the habit of never hardcoding a real key is what protects you from all of those, not the current visibility setting.</span></div>
-    <div class="opt" data-c="1"><span class="ab">B</span><span>Nothing — a genuinely private repo is a fully sufficient place to store a live API key permanently.</span></div>
-    <div class="opt" data-c="2"><span class="ab">C</span><span>Private repos technically can't contain any text files at all, so the question doesn't apply.</span></div>
-    <div class="quizWhy">Correct answer: <b>A</b>. "Private today" isn't a durable guarantee — visibility settings change, collaborators change, tools change. Environment variables are the fix precisely because they don't depend on remembering to keep something private forever.</div>
+    <div class="opt" data-c="1"><span class="ab">A</span><span>Nothing — a genuinely private repo is a sufficient place to keep a live API key permanently stored.</span></div>
+    <div class="opt" data-c="2"><span class="ab">B</span><span>GitHub encrypts file contents inside private repos, so a hardcoded key there is already safe from exposure.</span></div>
+    <div class="opt" data-c="3"><span class="ab">C</span><span>The real issue is carelessness, not visibility — a disciplined developer can safely hardcode secrets in private repos.</span></div>
+    <div class="opt" data-c="0"><span class="ab">D</span><span>A private repo can be made public by mistake, shared with someone, or wired to tools that log its contents.</span></div>
+    <div class="quizWhy">Correct answer: <b>D</b>. "Private today" isn't a durable guarantee — visibility settings change, collaborators change, tools change. Environment variables are the fix precisely because they don't depend on remembering to keep something private forever.</div>
   </div>
 </div></section>
 
@@ -601,10 +604,11 @@ pre.code .kw{color:var(--orange2)}
 
   <div class="say do">
     <span class="who">🛠 Instructor Does — live, on screen</span>
-    <p>Open a vibe-coding tool the class already knows (Lovable, Bolt, or Claude Code directly in the terminal) and give it one focused prompt: <em>"Build a small Node.js + Express app called Restock Radar. One HTML page with a form (book title, note). POST /request calls the Gemini API to tag the note's urgency as Low/Medium/High, then appends {title, note, urgency, time} to an in-memory array. GET / renders the current list, newest first. Read the Gemini key from process.env.GEMINI_API_KEY — never hardcode it."</em> Two files come back: <code class="k">server.js</code> and <code class="k">index.html</code>. Run it once locally — <code class="k">npm install && node server.js</code> — submit one test request, confirm the urgency tag comes back and the list renders. Nothing further gets hand-written; today is about shipping it, not polishing it.</p>
+    <p>Open a vibe-coding tool the class already knows (Lovable, Bolt, or Claude Code directly in the terminal) and give it one focused prompt: <em>"Build a small Node.js + Express app called Restock Radar. One HTML page with a form (book title, note). POST /request calls the Gemini API to tag the note's urgency as Low/Medium/High, then appends {title, note, urgency, time} to an in-memory array. GET / renders the current list, newest first. Read the Gemini key from process.env.GEMINI_API_KEY — never hardcode it."</em> A few files will comeback. Run it once locally — <code class="k">npm install && node server.js</code> (or, if the tool wired up a start script in <code class="k">package.json</code>, <code class="k">npm start</code> works the same) — submit one test request, confirm the urgency tag comes back and the list renders. Nothing further gets hand-written; today is about shipping it, not polishing it.</p>
   </div>
 
   <ol class="verifySteps">
+    <li><b>Create a <code class="k">.env</code> file and add it to <code class="k">.gitignore</code> — before anything gets pushed.</b> Put the real key in <code class="k">.env</code> (<code class="k">GEMINI_API_KEY=...</code>) and add a line <code class="k">.env</code> to <code class="k">.gitignore</code>. This is worth showing, not just saying: if <code class="k">.env</code> is committed with the real key in it and pushed to a public GitHub repo, GitHub's own push protection throws an error and blocks the push — a live, visible consequence of skipping <code class="k">.gitignore</code>, not just a rule to take on faith.</li>
     <li><b>Push the app to GitHub</b> — the same Git and GitHub account confirmed ready in §2, the identical three commands from Build 1, just run inside the new folder:
       <div class="codeWrap"><button class="copyBtn" type="button">Copy</button><pre class="code"><span class="cm"># Terminal — run inside the restock-radar folder</span>
 <span class="fn">git</span> init
@@ -616,8 +620,8 @@ pre.code .kw{color:var(--orange2)}
 <span class="fn">git</span> push -u origin main</pre></div>
     </li>
     <li><b>Deploy the SAME repo to Render.</b> On the Render dashboard: <b>New +</b> → <b>Web Service</b> → connect the <code class="k">restock-radar</code> repo. Build command <code class="k">npm install</code>, start command <code class="k">node server.js</code>. Under <b>Environment</b>, add <code class="k">GEMINI_API_KEY</code> with the real key. Click <b>Deploy Web Service</b>.</li>
-    <li><b>Deploy the SAME repo to Railway, at the same time.</b> On the Railway dashboard: <b>New Project</b> → <b>Deploy from GitHub repo</b> → pick <code class="k">restock-radar</code>. Railway auto-detects a Node app and infers the start command from <code class="k">package.json</code>. Under the service's <b>Variables</b> tab, add <code class="k">GEMINI_API_KEY</code> the same way. Deploy starts automatically the moment the variable is saved.</li>
-    <li><b>Open both live URLs side by side</b> — Render hands out something like <code class="k">restock-radar.onrender.com</code>, Railway something like <code class="k">restock-radar.up.railway.app</code>. Submit the identical restock request on each and confirm both return the same urgency tag and both show it in their list.</li>
+    <li><b>Deploy the SAME repo to Railway, at the same time.</b> On the Railway dashboard: <b>New Project</b> → <b>Deploy from GitHub repo</b> → pick <code class="k">restock-radar</code>. Railway auto-detects a Node app and infers the start command from <code class="k">package.json</code>. Under the service's <b>Variables</b> tab, add <code class="k">GEMINI_API_KEY</code> the same way. Deploy starts automatically the moment the variable is saved. Unlike Render, Railway doesn't hand you a public URL by default — go to the service's <b>Settings</b> tab and click <b>Generate Domain</b> to get one.</li>
+    <li><b>Open both live URLs side by side</b> — Render hands out something like <code class="k">restock-radar.onrender.com</code> automatically, Railway something like <code class="k">restock-radar.up.railway.app</code> once a domain is generated in Settings. Submit the identical restock request on each and confirm both return the same urgency tag and both show it in their list.</li>
   </ol>
 
   <div class="twoCol">
@@ -627,7 +631,7 @@ pre.code .kw{color:var(--orange2)}
     </div>
     <div class="colCard">
       <div class="ct" style="color:var(--gold)">RAILWAY — WHAT THE DASHBOARD ACTUALLY ASKS FOR</div>
-      <p>No build/start command needed for a standard Node app — it reads <code class="k">package.json</code> itself. Variables live under a <b>Variables</b> tab, not "Environment." Deploy is comparably fast. No 15-minute spin-down on a running service — the ceiling here is the <b>trial credit running out</b>, not idle time.</p>
+      <p>No build/start command needed for a standard Node app — it reads <code class="k">package.json</code> itself. Variables live under a <b>Variables</b> tab, not "Environment." A public URL isn't automatic — it has to be switched on under <b>Settings → Generate Domain</b>. Deploy is comparably fast. No 15-minute spin-down on a running service — the ceiling here is the <b>trial credit running out</b>, not idle time.</p>
     </div>
   </div>
 
@@ -652,10 +656,11 @@ pre.code .kw{color:var(--orange2)}
 
   <div class="quiz" id="quiz4">
     <div class="q">Q4. Reema asks why the class deployed Restock Radar to both Render and Railway today, instead of just picking one and moving on. What's the fair answer?</div>
-    <div class="opt" data-c="0"><span class="ab">A</span><span>Because deploying the same small app to both, side by side, is what actually shows the real differences — build steps, variable panels, spin-down vs. trial-credit — instead of taking a comparison table's word for it. In practice, Chapter One would keep only one going forward.</span></div>
-    <div class="opt" data-c="1"><span class="ab">B</span><span>Because a single app must always be deployed to every available platform simultaneously as a permanent redundancy strategy.</span></div>
-    <div class="opt" data-c="2"><span class="ab">C</span><span>Because Render and Railway secretly require each other to function and neither works alone.</span></div>
-    <div class="quizWhy">Correct answer: <b>A</b>. Today's parallel deploy is a teaching exercise, not a production pattern — the point is to feel the differences firsthand once, not to run every app on two platforms forever.</div>
+    <div class="opt" data-c="1"><span class="ab">A</span><span>Because Render and Railway secretly depend on each other to function, and neither one actually works alone.</span></div>
+    <div class="opt" data-c="0"><span class="ab">B</span><span>Because deploying one app to both, side by side, shows the real differences instead of trusting a table.</span></div>
+    <div class="opt" data-c="2"><span class="ab">C</span><span>Because a single app must always be deployed to every available platform at once, as permanent redundancy.</span></div>
+    <div class="opt" data-c="3"><span class="ab">D</span><span>Because Railway requires an existing Render account before it will accept a GitHub repo, making Render mandatory.</span></div>
+    <div class="quizWhy">Correct answer: <b>B</b>. Today's parallel deploy is a teaching exercise, not a production pattern — the point is to feel the differences firsthand once, not to run every app on two platforms forever.</div>
   </div>
 </div></section>
 
@@ -692,11 +697,12 @@ pre.code .kw{color:var(--orange2)}
   </div>
 
   <div class="quiz" id="quiz5">
-    <div class="q">Q5. A visitor complains the shelf-talker link "took forever to load" the first time this morning, but was instant every time after. Which platform's known behaviour explains this exactly, and is it actually a bug?</div>
-    <div class="opt" data-c="1"><span class="ab">A</span><span>This describes Vercel serving a static file — and it's a genuine bug that needs fixing.</span></div>
-    <div class="opt" data-c="0"><span class="ab">B</span><span>This is Render's free-tier spin-down/cold-start behaviour on a backend service that had been idle for 15+ minutes — expected, documented, and not a bug at all.</span></div>
-    <div class="opt" data-c="2"><span class="ab">C</span><span>This only happens on Railway, and only after the trial credit is fully exhausted.</span></div>
-    <div class="quizWhy">Correct answer: <b>B</b>. A slow-then-instant pattern on an idle backend is the textbook signature of Render's free-tier spin-down — the first request wakes the service, every request after that hits it already warm.</div>
+    <div class="q">Q5. A visitor complains the Restock Radar link on Render "took forever to load" the first time this morning, but was instant every time after. Which platform behaviour explains this exactly, and is it actually a bug?</div>
+    <div class="opt" data-c="1"><span class="ab">A</span><span>This describes Vercel serving a static file, and it is a genuine bug that someone needs to fix.</span></div>
+    <div class="opt" data-c="2"><span class="ab">B</span><span>This happens only on Railway, and only once the trial credit for the month has been fully exhausted.</span></div>
+    <div class="opt" data-c="0"><span class="ab">C</span><span>This is Render's free-tier spin-down waking an idle backend service — expected, documented, and not a bug.</span></div>
+    <div class="opt" data-c="3"><span class="ab">D</span><span>This means Restock Radar's own code contains a slow-loading script that ought to be optimized properly.</span></div>
+    <div class="quizWhy">Correct answer: <b>C</b>. A slow-then-instant pattern on an idle backend is the textbook signature of Render's free-tier spin-down — the first request wakes the service, every request after that hits it already warm.</div>
   </div>
 </div></section>
 
